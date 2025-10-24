@@ -1,408 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Work Bench – Build Better, Faster</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jellyfish Force Bloom</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        background: radial-gradient(circle at 20% 20%, #102640 0%, #041324 45%, #01070f 100%);
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: rgba(220, 235, 255, 0.75);
+        overflow: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(circle at 60% 110%, rgba(33, 94, 174, 0.55), transparent 52%),
+          radial-gradient(circle at 10% -10%, rgba(142, 193, 255, 0.14), transparent 48%);
+        pointer-events: none;
+        mix-blend-mode: screen;
+        opacity: 0.8;
+      }
+
+      svg {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      .link {
+        stroke-width: 1.2;
+        stroke-linecap: round;
+      }
+
+      .node {
+        pointer-events: none;
+      }
+
+      .node--head {
+        fill: #fcefb9;
+        opacity: 0.92;
+      }
+
+      .node--tentacle {
+        fill: #8fd5ff;
+        opacity: 0.78;
+      }
+
+      .overlay-copy {
+        position: fixed;
+        inset: auto 4vw 4vh;
+        max-width: min(30ch, 88vw);
+        font-size: clamp(0.9rem, 1vw + 0.7rem, 1.25rem);
+        line-height: 1.45;
+        letter-spacing: 0.02em;
+        color: rgba(200, 220, 255, 0.68);
+        text-shadow: 0 0 16px rgba(6, 25, 44, 0.9);
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
   </head>
   <body>
-    <header class="site-header">
-      <div class="container header-inner">
-        <a href="#" class="brand" aria-label="Work Bench home">
-          <span class="brand-mark">WB</span>
-          <span class="brand-name">Work Bench</span>
-        </a>
-        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="nav-toggle-bar"></span>
-          <span class="nav-toggle-bar"></span>
-          <span class="nav-toggle-bar"></span>
-        </button>
-        <nav id="primary-navigation" class="site-nav" aria-label="Primary">
-          <ul>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#solutions">Solutions</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-          <a class="button button--ghost" href="#contact">Request Demo</a>
-        </nav>
-      </div>
-    </header>
+    <svg id="stage" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3.2" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <radialGradient id="vignette" cx="50%" cy="50%" r="75%">
+          <stop offset="55%" stop-color="#0000" />
+          <stop offset="100%" stop-color="#000b" />
+        </radialGradient>
+        <linearGradient id="deep-sea" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#071a2e" />
+          <stop offset="55%" stop-color="#031120" />
+          <stop offset="100%" stop-color="#00060e" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="100%" height="100%" fill="url(#deep-sea)" />
+      <rect x="0" y="0" width="100%" height="100%" fill="url(#vignette)" opacity="0.82" />
+    </svg>
+    <div class="overlay-copy">Floating systems dreaming in slow pulses of light.</div>
 
-    <main>
-      <section class="hero" id="hero">
-        <div class="container hero-inner">
-          <div class="hero-copy">
-            <p class="eyebrow">Build smarter workflows</p>
-            <h1>The productivity operating system for modern teams.</h1>
-            <p>
-              Work Bench helps product, engineering, and operations teams connect data,
-              automate processes, and launch high-impact work faster than ever.
-            </p>
-            <div class="hero-actions">
-              <a class="button" href="#pricing">Start free trial</a>
-              <a class="button button--ghost" href="#about">See how it works</a>
-            </div>
-            <div class="hero-trust">
-              <p>Trusted by teams at</p>
-              <ul>
-                <li>Northwind Labs</li>
-                <li>Acme Cloud</li>
-                <li>Vertex Studio</li>
-                <li>Lumen Tech</li>
-              </ul>
-            </div>
-          </div>
-          <div class="hero-visual" aria-hidden="true">
-            <div class="dashboard">
-              <div class="dashboard-header">
-                <span class="status status--active">Live</span>
-                <span class="status">Automation</span>
-                <span class="status">Insights</span>
-              </div>
-              <div class="dashboard-body">
-                <div class="stat-card">
-                  <p>Deployments</p>
-                  <h3>128</h3>
-                  <span class="trend trend--up">+18%</span>
-                </div>
-                <div class="stat-card">
-                  <p>Cycle time</p>
-                  <h3>2.4d</h3>
-                  <span class="trend trend--down">-32%</span>
-                </div>
-                <div class="stat-card">
-                  <p>Automation savings</p>
-                  <h3>342 hrs</h3>
-                  <span class="trend trend--up">+64%</span>
-                </div>
-              </div>
-              <div class="dashboard-footer">
-                <p>Forecast: 2 new launches this week</p>
-                <div class="progress">
-                  <span style="width: 68%"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <script>
+      (function () {
+        const svg = d3.select('#stage');
+        const gLinks = svg.append('g');
+        const gNodes = svg.append('g');
 
-      <section class="section" id="features">
-        <div class="container section-header">
-          <p class="eyebrow">What you can do</p>
-          <h2>Everything you need to ship faster without sacrificing quality.</h2>
-          <p>
-            Work Bench brings your workflows, data, and automations together so teams can
-            collaborate, analyze, and deliver with confidence.
-          </p>
-        </div>
-        <div class="container feature-grid">
-          <article class="feature-card">
-            <span class="feature-icon">⚡️</span>
-            <h3>Automated pipelines</h3>
-            <p>
-              Trigger releases, sync data, and orchestrate complex workflows with a visual
-              automation builder.
-            </p>
-          </article>
-          <article class="feature-card">
-            <span class="feature-icon">📊</span>
-            <h3>Unified analytics</h3>
-            <p>
-              Centralize metrics from every tool and build dashboards that update in real
-              time.
-            </p>
-          </article>
-          <article class="feature-card">
-            <span class="feature-icon">🤝</span>
-            <h3>Team collaboration</h3>
-            <p>
-              Keep every stakeholder aligned with shared timelines, approvals, and
-              automated alerts.
-            </p>
-          </article>
-          <article class="feature-card">
-            <span class="feature-icon">🔐</span>
-            <h3>Enterprise-grade security</h3>
-            <p>
-              SOC 2 compliant, SSO ready, and built with role-based access to keep your
-              data protected.
-            </p>
-          </article>
-        </div>
-      </section>
+        let width = svg.node().clientWidth;
+        let height = svg.node().clientHeight;
 
-      <section class="section section--alt" id="about">
-        <div class="container split">
-          <div>
-            <p class="eyebrow">Why Work Bench</p>
-            <h2>Run your entire product lifecycle from one powerful workspace.</h2>
-            <p>
-              With Work Bench, teams connect strategy to delivery. Visual roadmaps, live
-              dashboards, and automated workflows eliminate busywork so you can ship what
-              matters.
-            </p>
-            <ul class="list">
-              <li>Launch features 3x faster with integrated deployment pipelines.</li>
-              <li>Keep leadership informed with real-time reporting and custom alerts.</li>
-              <li>Empower teams with a single source of truth for goals, updates, and docs.</li>
-            </ul>
-            <a class="button" href="#contact">Talk to an expert</a>
-          </div>
-          <div class="card-stack" aria-hidden="true">
-            <div class="card">
-              <h3>Launch readiness</h3>
-              <p>Assign launch owners, dependencies, and QA checkpoints in seconds.</p>
-            </div>
-            <div class="card">
-              <h3>AI assistant</h3>
-              <p>Draft release notes, summarize standups, and surface risks proactively.</p>
-            </div>
-            <div class="card">
-              <h3>Workflow library</h3>
-              <p>Start from 50+ templates tailored for product, ops, and go-to-market teams.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+        const W1 = (2 * Math.PI) / 36; // bell pulse ~36s
+        const W2 = (2 * Math.PI) / 44; // sway ~44s
+        const W3 = (2 * Math.PI) / 51; // drift ~51s
 
-      <section class="section" id="solutions">
-        <div class="container section-header">
-          <p class="eyebrow">Solutions</p>
-          <h2>Flexible for every team, powerful for the entire organization.</h2>
-        </div>
-        <div class="container solution-grid">
-          <article class="solution-card">
-            <h3>Product & Engineering</h3>
-            <p>Plan sprints, track releases, and automate QA handoffs in a single hub.</p>
-            <ul class="list list--compact">
-              <li>Epic to release tracking</li>
-              <li>CI/CD integrations</li>
-              <li>Incident response playbooks</li>
-            </ul>
-          </article>
-          <article class="solution-card">
-            <h3>Operations</h3>
-            <p>Build resilient processes with cross-team visibility and automated audits.</p>
-            <ul class="list list--compact">
-              <li>Vendor onboarding</li>
-              <li>Compliance workflows</li>
-              <li>Capacity planning</li>
-            </ul>
-          </article>
-          <article class="solution-card">
-            <h3>Go-to-Market</h3>
-            <p>Align marketing, sales, and success teams around shared customer data.</p>
-            <ul class="list list--compact">
-              <li>Campaign orchestration</li>
-              <li>Deal desk automation</li>
-              <li>Customer health scoring</li>
-            </ul>
-          </article>
-        </div>
-      </section>
+        const nodes = [];
+        const links = [];
+        let idCounter = 0;
 
-      <section class="section section--alt" id="testimonials">
-        <div class="container section-header">
-          <p class="eyebrow">Customer stories</p>
-          <h2>Teams ship bigger ideas in half the time.</h2>
-        </div>
-        <div class="container testimonial-grid">
-          <figure class="testimonial">
-            <blockquote>
-              “Work Bench helped us coordinate a global launch across nine teams without a
-              single missed dependency. We cut cycle time by 42% in the first quarter.”
-            </blockquote>
-            <figcaption>
-              <strong>Emerson Shaw</strong>
-              VP of Product, Northwind Labs
-            </figcaption>
-          </figure>
-          <figure class="testimonial">
-            <blockquote>
-              “Finally, a platform that brings our roadmap, analytics, and automation under
-              one roof. The executive team gets live insights, and our squads stay focused.”
-            </blockquote>
-            <figcaption>
-              <strong>Leila Park</strong>
-              Head of Operations, Lumen Tech
-            </figcaption>
-          </figure>
-        </div>
-      </section>
+        const addNode = (props) => {
+          const node = Object.assign(
+            {
+              id: `n${idCounter++}`,
+              base: 4,
+              phase: Math.random() * Math.PI * 2,
+              offsetX: 0,
+              offsetY: 0,
+              type: 'head',
+            },
+            props
+          );
+          nodes.push(node);
+          return node;
+        };
 
-      <section class="section" id="metrics">
-        <div class="container metrics">
-          <div>
-            <h2>Built to deliver measurable impact.</h2>
-            <p>
-              Companies who switch to Work Bench see faster delivery, happier teams, and
-              higher customer satisfaction scores within the first 90 days.
-            </p>
-          </div>
-          <div class="metrics-stats">
-            <div class="metrics-card">
-              <h3>58%</h3>
-              <p>Average acceleration in launch cadence.</p>
-            </div>
-            <div class="metrics-card">
-              <h3>72%</h3>
-              <p>Reduction in manual status reporting.</p>
-            </div>
-            <div class="metrics-card">
-              <h3>94%</h3>
-              <p>Customer satisfaction with new feature delivery.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+        const core = addNode({ type: 'head', layer: 'core', base: 7.2, offsetY: -62 });
 
-      <section class="section section--alt" id="pricing">
-        <div class="container section-header">
-          <p class="eyebrow">Pricing</p>
-          <h2>Get started today, scale with confidence.</h2>
-        </div>
-        <div class="container pricing-grid">
-          <article class="pricing-card">
-            <h3>Starter</h3>
-            <p class="price">$29<span>/seat</span></p>
-            <p>Perfect for growing teams getting started with automation.</p>
-            <ul class="list list--compact">
-              <li>Unlimited projects</li>
-              <li>Workflow templates</li>
-              <li>Email support</li>
-            </ul>
-            <a class="button" href="#contact">Choose Starter</a>
-          </article>
-          <article class="pricing-card pricing-card--highlight">
-            <div class="badge">Most Popular</div>
-            <h3>Scale</h3>
-            <p class="price">$69<span>/seat</span></p>
-            <p>Advanced automation and reporting for high-performing teams.</p>
-            <ul class="list list--compact">
-              <li>Automation builder</li>
-              <li>Advanced analytics</li>
-              <li>Priority support</li>
-            </ul>
-            <a class="button" href="#contact">Choose Scale</a>
-          </article>
-          <article class="pricing-card">
-            <h3>Enterprise</h3>
-            <p class="price">Custom</p>
-            <p>Tailored solutions with dedicated success and enterprise security.</p>
-            <ul class="list list--compact">
-              <li>SSO & SCIM provisioning</li>
-              <li>Custom integrations</li>
-              <li>Dedicated success manager</li>
-            </ul>
-            <a class="button button--ghost" href="#contact">Contact sales</a>
-          </article>
-        </div>
-      </section>
+        const headLayers = [
+          { count: 6, radius: 48, lift: -42 },
+          { count: 10, radius: 92, lift: -12 },
+          { count: 14, radius: 134, lift: 16 },
+        ];
 
-      <section class="section section--contact" id="contact">
-        <div class="container contact">
-          <div>
-            <h2>See Work Bench in action.</h2>
-            <p>
-              Tell us about your team and we’ll craft a tailored walkthrough to show how
-              Work Bench accelerates your priorities.
-            </p>
-          </div>
-          <form class="contact-form">
-            <div class="form-group">
-              <label for="name">Full name</label>
-              <input type="text" id="name" name="name" placeholder="Alex Morgan" required />
-            </div>
-            <div class="form-group">
-              <label for="email">Work email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="alex@company.com"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="company">Company</label>
-              <input
-                type="text"
-                id="company"
-                name="company"
-                placeholder="Company name"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="team-size">Team size</label>
-              <select id="team-size" name="team-size" required>
-                <option value="" disabled selected>Select an option</option>
-                <option value="1-10">1-10</option>
-                <option value="11-50">11-50</option>
-                <option value="51-200">51-200</option>
-                <option value="201-500">201-500</option>
-                <option value="500+">500+</option>
-              </select>
-            </div>
-            <div class="form-group form-group--full">
-              <label for="goals">What are your goals?</label>
-              <textarea
-                id="goals"
-                name="goals"
-                rows="3"
-                placeholder="Share what you’re hoping to accomplish."
-              ></textarea>
-            </div>
-            <button type="submit" class="button">Request demo</button>
-            <p class="form-footnote">
-              We’ll follow up within one business day. No spam, ever.
-            </p>
-          </form>
-        </div>
-      </section>
-    </main>
+        let previousLayer = [core];
+        headLayers.forEach((layer, layerIndex) => {
+          const ringNodes = [];
+          for (let i = 0; i < layer.count; i++) {
+            const angle = (i / layer.count) * Math.PI * 2;
+            const jitter = 0.86 + Math.random() * 0.18;
+            const offsetX = Math.cos(angle) * layer.radius * jitter;
+            const offsetY = Math.sin(angle) * layer.radius * 0.55 * jitter + layer.lift;
+            ringNodes.push(
+              addNode({
+                type: 'head',
+                layer: layerIndex,
+                base: d3.randomUniform(4.2, 6.2)(),
+                offsetX,
+                offsetY,
+              })
+            );
+          }
 
-    <footer class="site-footer">
-      <div class="container footer-inner">
-        <div>
-          <a href="#" class="brand" aria-label="Work Bench home">
-            <span class="brand-mark">WB</span>
-            <span class="brand-name">Work Bench</span>
-          </a>
-          <p>Orchestrate your product lifecycle with clarity and speed.</p>
-        </div>
-        <div class="footer-links">
-          <nav aria-label="Footer">
-            <ul>
-              <li><a href="#features">Features</a></li>
-              <li><a href="#solutions">Solutions</a></li>
-              <li><a href="#pricing">Pricing</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </nav>
-          <div class="footer-meta">
-            <p>© <span id="year"></span> Work Bench. All rights reserved.</p>
-            <div class="social">
-              <a href="#" aria-label="LinkedIn">in</a>
-              <a href="#" aria-label="Twitter">tw</a>
-              <a href="#" aria-label="YouTube">yt</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+          // membrane connections
+          ringNodes.forEach((node, i) => {
+            const next = ringNodes[(i + 1) % ringNodes.length];
+            links.push({ source: node.id, target: next.id, kind: 'membrane' });
+          });
 
-    <script src="script.js"></script>
+          // radial supports
+          ringNodes.forEach((node, i) => {
+            const anchor = previousLayer[Math.floor((i / ringNodes.length) * previousLayer.length)];
+            links.push({ source: node.id, target: anchor.id, kind: 'radial' });
+          });
+
+          previousLayer = ringNodes;
+        });
+
+        const rimNodes = previousLayer.slice().sort((a, b) => a.offsetX - b.offsetX);
+
+        const TENTACLE_COUNT = 6;
+        const TENTACLE_LENGTH = 7;
+        const tentacleXs = d3.range(TENTACLE_COUNT).map((i) => -110 + (220 / (TENTACLE_COUNT - 1)) * i);
+
+        tentacleXs.forEach((baseX, idx) => {
+          let prev = null;
+          let topSegment = null;
+          for (let j = 0; j < TENTACLE_LENGTH; j++) {
+            const depth = 96 + j * 40;
+            const swayBase = baseX * (0.92 + Math.random() * 0.08);
+            const segmentNode = addNode({
+              type: 'tentacle',
+              tentacle: idx,
+              segment: j,
+              base: d3.randomUniform(2.3, 3.1)() + j * 0.18,
+              offsetX: swayBase + (Math.random() - 0.5) * 10,
+              offsetY: depth + (Math.random() - 0.5) * 14,
+            });
+            if (!topSegment) topSegment = segmentNode;
+            if (prev) {
+              links.push({ source: prev.id, target: segmentNode.id, kind: 'tentacle', segment: j });
+            }
+            prev = segmentNode;
+          }
+          const attach = rimNodes[Math.floor((idx / (TENTACLE_COUNT - 1)) * (rimNodes.length - 1))];
+          links.push({ source: attach.id, target: topSegment.id, kind: 'tentacle-root', segment: 0 });
+        });
+
+        let linkSel = gLinks
+          .selectAll('line')
+          .data(links)
+          .join('line')
+          .attr('class', 'link')
+          .attr('stroke', (d) =>
+            d.kind === 'tentacle' || d.kind === 'tentacle-root'
+              ? 'rgba(120, 198, 255, 0.18)'
+              : 'rgba(255, 242, 203, 0.12)'
+          )
+          .attr('stroke-width', (d) => (d.kind === 'membrane' ? 1.6 : d.kind.startsWith('tentacle') ? 1.05 : 1.2))
+          .attr('opacity', 0.0);
+
+        linkSel = linkSel.transition().duration(1200).attr('opacity', 1).selection();
+
+        let nodeSel = gNodes
+          .selectAll('circle')
+          .data(nodes)
+          .join('circle')
+          .attr('class', (d) => `node node--${d.type}`)
+          .attr('r', (d) => d.base)
+          .attr('cx', width / 2)
+          .attr('cy', height / 2)
+          .attr('filter', (d) => (d.type === 'head' ? 'url(#glow)' : null))
+          .attr('opacity', 0.0);
+
+        nodeSel = nodeSel
+          .transition()
+          .duration(900)
+          .attr('opacity', (d) => (d.type === 'head' ? 0.95 : 0.78))
+          .selection();
+
+        const forceLink = d3
+          .forceLink(links)
+          .id((d) => d.id)
+          .distance((link) => {
+            if (link.kind === 'tentacle') return 36 + link.segment * 6;
+            if (link.kind === 'tentacle-root') return 48;
+            if (link.kind === 'membrane') return 58;
+            if (link.kind === 'radial') return 42;
+            return 40;
+          })
+          .strength((link) => {
+            if (link.kind === 'tentacle') return 0.85;
+            if (link.kind === 'tentacle-root') return 0.9;
+            if (link.kind === 'membrane') return 0.55;
+            if (link.kind === 'radial') return 0.4;
+            return 0.3;
+          });
+
+        const forceCharge = d3.forceManyBody().strength((node) => (node.type === 'head' ? -22 : -6));
+        const forceCollide = d3
+          .forceCollide()
+          .radius((node) => (node.type === 'head' ? 12 : 6))
+          .iterations(3);
+        const forceX = d3.forceX(width / 2).strength(0.016);
+        const forceY = d3.forceY(height / 2 + 50).strength(0.015);
+
+        const sim = d3
+          .forceSimulation(nodes)
+          .force('link', forceLink)
+          .force('charge', forceCharge)
+          .force('collide', forceCollide)
+          .force('x', forceX)
+          .force('y', forceY)
+          .velocityDecay(0.5)
+          .alphaDecay(0.015)
+          .on('tick', ticked);
+
+        function anchorAtTime(time) {
+          const ax = width * (0.5 + 0.16 * Math.sin(W1 * time + 0.6));
+          const ay = height * (0.53 + 0.12 * Math.cos(W2 * time + 1.25));
+          return [ax, ay];
+        }
+
+        function ticked() {
+          const time = performance.now() / 1000;
+          const [anchorX, anchorY] = anchorAtTime(time);
+          const bob = 28 * Math.sin(W3 * time + 0.8);
+          forceX.x(anchorX);
+          forceY.y(anchorY + bob);
+
+          const bellPulse = 0.86 + 0.18 * Math.sin(W1 * time);
+          const bellSkew = 0.82 + 0.22 * Math.sin(W2 * time + 0.9);
+
+          nodes.forEach((node) => {
+            if (node.type === 'head') {
+              const wobbleX = node.offsetX * bellSkew;
+              const wobbleY = node.offsetY * bellPulse;
+              const driftX = 18 * Math.sin(W2 * time + node.phase * 0.7);
+              const driftY = 16 * Math.cos(W3 * time + node.phase * 0.9);
+              const targetX = anchorX + wobbleX + driftX;
+              const targetY = anchorY + wobbleY + driftY;
+              node.vx += (targetX - node.x) * 0.0065;
+              node.vy += (targetY - node.y) * 0.0065;
+            } else {
+              const sway = 24 * Math.sin(W2 * time + node.segment * 0.55 + node.phase);
+              const lag = 20 * Math.cos(W3 * time + node.segment * 0.45 + node.phase * 0.5);
+              const stretch = 1 + 0.22 * Math.sin(W1 * time + node.segment * 0.36);
+              const targetX = anchorX + node.offsetX + sway;
+              const targetY = anchorY + node.offsetY * stretch + lag;
+              const spring = 0.018 + node.segment * 0.0025;
+              node.vx += (targetX - node.x) * spring;
+              node.vy += (targetY - node.y) * (spring + 0.002);
+            }
+          });
+
+          nodeSel
+            .attr('cx', (d) => d.x)
+            .attr('cy', (d) => d.y)
+            .attr('r', (d) => {
+              if (d.type === 'head') {
+                const pulse = d.base * (0.92 + 0.16 * Math.sin(W1 * time + d.phase));
+                return Math.max(3.4, Math.min(9.6, pulse));
+              }
+              const ripple = d.base * (0.85 + 0.25 * Math.sin(W2 * time + d.phase + d.segment * 0.3));
+              return Math.max(1.8, Math.min(4.2, ripple));
+            });
+
+          linkSel
+            .attr('x1', (d) => d.source.x)
+            .attr('y1', (d) => d.source.y)
+            .attr('x2', (d) => d.target.x)
+            .attr('y2', (d) => d.target.y);
+        }
+
+        const resize = () => {
+          width = svg.node().clientWidth;
+          height = svg.node().clientHeight;
+          sim.alpha(0.3).restart();
+        };
+
+        const resizeObserver = new ResizeObserver(resize);
+        resizeObserver.observe(svg.node());
+
+        d3.timer(() => sim.alphaTarget(0.045));
+      })();
+    </script>
   </body>
 </html>
