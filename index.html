@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Jellyfish Force Bloom</title>
+    <title></title>
     <style>
       :root {
         color-scheme: dark;
@@ -13,21 +13,8 @@
       body {
         height: 100%;
         margin: 0;
-        background: radial-gradient(circle at 20% 20%, #102640 0%, #041324 45%, #01070f 100%);
-        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        color: rgba(220, 235, 255, 0.75);
+        background: radial-gradient(circle at 18% 18%, #120d24 0%, #070616 45%, #01030b 100%);
         overflow: hidden;
-      }
-
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background: radial-gradient(circle at 60% 110%, rgba(33, 94, 174, 0.55), transparent 52%),
-          radial-gradient(circle at 10% -10%, rgba(142, 193, 255, 0.14), transparent 48%);
-        pointer-events: none;
-        mix-blend-mode: screen;
-        opacity: 0.8;
       }
 
       svg {
@@ -37,33 +24,14 @@
       }
 
       .link {
-        stroke-width: 1.2;
+        stroke: rgba(255, 224, 122, 0.18);
+        stroke-width: 1.6;
         stroke-linecap: round;
       }
 
       .node {
-        pointer-events: none;
-      }
-
-      .node--head {
-        fill: #fcefb9;
-        opacity: 0.92;
-      }
-
-      .node--tentacle {
-        fill: #8fd5ff;
-        opacity: 0.78;
-      }
-
-      .overlay-copy {
-        position: fixed;
-        inset: auto 4vw 4vh;
-        max-width: min(30ch, 88vw);
-        font-size: clamp(0.9rem, 1vw + 0.7rem, 1.25rem);
-        line-height: 1.45;
-        letter-spacing: 0.02em;
-        color: rgba(200, 220, 255, 0.68);
-        text-shadow: 0 0 16px rgba(6, 25, 44, 0.9);
+        fill: #ffe066;
+        filter: url(#glow);
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
@@ -72,7 +40,7 @@
     <svg id="stage" preserveAspectRatio="xMidYMid slice">
       <defs>
         <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="3.2" result="blur" />
+          <feGaussianBlur stdDeviation="4.6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
@@ -82,17 +50,10 @@
           <stop offset="55%" stop-color="#0000" />
           <stop offset="100%" stop-color="#000b" />
         </radialGradient>
-        <linearGradient id="deep-sea" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#071a2e" />
-          <stop offset="55%" stop-color="#031120" />
-          <stop offset="100%" stop-color="#00060e" />
-        </linearGradient>
       </defs>
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#deep-sea)" />
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#vignette)" opacity="0.82" />
+      <rect x="0" y="0" width="100%" height="100%" fill="#03030a" opacity="0.65" />
+      <rect x="0" y="0" width="100%" height="100%" fill="url(#vignette)" opacity="0.85" />
     </svg>
-    <div class="overlay-copy">Floating systems dreaming in slow pulses of light.</div>
-
     <script>
       (function () {
         const svg = d3.select('#stage');
@@ -102,238 +63,236 @@
         let width = svg.node().clientWidth;
         let height = svg.node().clientHeight;
 
-        const W1 = (2 * Math.PI) / 36; // bell pulse ~36s
-        const W2 = (2 * Math.PI) / 44; // sway ~44s
-        const W3 = (2 * Math.PI) / 51; // drift ~51s
-
         const nodes = [];
         const links = [];
         let idCounter = 0;
 
-        const addNode = (props) => {
-          const node = Object.assign(
-            {
-              id: `n${idCounter++}`,
-              base: 4,
-              phase: Math.random() * Math.PI * 2,
-              offsetX: 0,
-              offsetY: 0,
-              type: 'head',
-            },
-            props
-          );
+        const MIN_NODES = 48;
+        const MAX_NODES = 210;
+        const INITIAL_NODES = 140;
+
+        const randomBetween = (min, max) => min + Math.random() * (max - min);
+        const jitter = (range) => (Math.random() - 0.5) * range;
+        const getId = (ref) => (typeof ref === 'object' ? ref.id : ref);
+
+        function createNode(opts = {}) {
+          const node = {
+            id: `n${idCounter++}`,
+            radius: opts.radius ?? randomBetween(10, 26),
+            pulseOffset: Math.random() * Math.PI * 2,
+          };
+          node.x = opts.x ?? width / 2 + jitter(width * 0.24);
+          node.y = opts.y ?? height / 2 + jitter(height * 0.24);
+          node.vx = 0;
+          node.vy = 0;
           nodes.push(node);
           return node;
-        };
+        }
 
-        const core = addNode({ type: 'head', layer: 'core', base: 7.2, offsetY: -62 });
-
-        const headLayers = [
-          { count: 6, radius: 48, lift: -42 },
-          { count: 10, radius: 92, lift: -12 },
-          { count: 14, radius: 134, lift: 16 },
-        ];
-
-        let previousLayer = [core];
-        headLayers.forEach((layer, layerIndex) => {
-          const ringNodes = [];
-          for (let i = 0; i < layer.count; i++) {
-            const angle = (i / layer.count) * Math.PI * 2;
-            const jitter = 0.86 + Math.random() * 0.18;
-            const offsetX = Math.cos(angle) * layer.radius * jitter;
-            const offsetY = Math.sin(angle) * layer.radius * 0.55 * jitter + layer.lift;
-            ringNodes.push(
-              addNode({
-                type: 'head',
-                layer: layerIndex,
-                base: d3.randomUniform(4.2, 6.2)(),
-                offsetX,
-                offsetY,
-              })
+        function linkExists(aId, bId) {
+          return links.some((link) => {
+            const sourceId = getId(link.source);
+            const targetId = getId(link.target);
+            return (
+              (sourceId === aId && targetId === bId) ||
+              (sourceId === bId && targetId === aId)
             );
+          });
+        }
+
+        function connectNodes(a, b) {
+          const sourceId = getId(a);
+          const targetId = getId(b);
+          if (sourceId === targetId) return null;
+          if (linkExists(sourceId, targetId)) return null;
+          const link = {
+            source: sourceId,
+            target: targetId,
+            shimmerOffset: Math.random() * Math.PI * 2,
+          };
+          links.push(link);
+          return link;
+        }
+
+        for (let i = 0; i < INITIAL_NODES; i++) {
+          createNode();
+        }
+
+        nodes.forEach((node, index) => {
+          const peers = nodes.filter((_, i) => i !== index);
+          const desired = Math.floor(randomBetween(3, 6));
+          const shuffled = d3.shuffle(peers.slice());
+          for (let i = 0; i < desired; i++) {
+            connectNodes(node, shuffled[i]);
           }
-
-          // membrane connections
-          ringNodes.forEach((node, i) => {
-            const next = ringNodes[(i + 1) % ringNodes.length];
-            links.push({ source: node.id, target: next.id, kind: 'membrane' });
-          });
-
-          // radial supports
-          ringNodes.forEach((node, i) => {
-            const anchor = previousLayer[Math.floor((i / ringNodes.length) * previousLayer.length)];
-            links.push({ source: node.id, target: anchor.id, kind: 'radial' });
-          });
-
-          previousLayer = ringNodes;
         });
 
-        const rimNodes = previousLayer.slice().sort((a, b) => a.offsetX - b.offsetX);
+        let linkSel = gLinks.selectAll('line');
+        let nodeSel = gNodes.selectAll('circle');
 
-        const TENTACLE_COUNT = 6;
-        const TENTACLE_LENGTH = 7;
-        const tentacleXs = d3.range(TENTACLE_COUNT).map((i) => -110 + (220 / (TENTACLE_COUNT - 1)) * i);
-
-        tentacleXs.forEach((baseX, idx) => {
-          let prev = null;
-          let topSegment = null;
-          for (let j = 0; j < TENTACLE_LENGTH; j++) {
-            const depth = 96 + j * 40;
-            const swayBase = baseX * (0.92 + Math.random() * 0.08);
-            const segmentNode = addNode({
-              type: 'tentacle',
-              tentacle: idx,
-              segment: j,
-              base: d3.randomUniform(2.3, 3.1)() + j * 0.18,
-              offsetX: swayBase + (Math.random() - 0.5) * 10,
-              offsetY: depth + (Math.random() - 0.5) * 14,
-            });
-            if (!topSegment) topSegment = segmentNode;
-            if (prev) {
-              links.push({ source: prev.id, target: segmentNode.id, kind: 'tentacle', segment: j });
-            }
-            prev = segmentNode;
-          }
-          const attach = rimNodes[Math.floor((idx / (TENTACLE_COUNT - 1)) * (rimNodes.length - 1))];
-          links.push({ source: attach.id, target: topSegment.id, kind: 'tentacle-root', segment: 0 });
-        });
-
-        let linkSel = gLinks
-          .selectAll('line')
-          .data(links)
-          .join('line')
-          .attr('class', 'link')
-          .attr('stroke', (d) =>
-            d.kind === 'tentacle' || d.kind === 'tentacle-root'
-              ? 'rgba(120, 198, 255, 0.18)'
-              : 'rgba(255, 242, 203, 0.12)'
-          )
-          .attr('stroke-width', (d) => (d.kind === 'membrane' ? 1.6 : d.kind.startsWith('tentacle') ? 1.05 : 1.2))
-          .attr('opacity', 0.0);
-
-        linkSel = linkSel.transition().duration(1200).attr('opacity', 1).selection();
-
-        let nodeSel = gNodes
-          .selectAll('circle')
-          .data(nodes)
-          .join('circle')
-          .attr('class', (d) => `node node--${d.type}`)
-          .attr('r', (d) => d.base)
-          .attr('cx', width / 2)
-          .attr('cy', height / 2)
-          .attr('filter', (d) => (d.type === 'head' ? 'url(#glow)' : null))
-          .attr('opacity', 0.0);
-
-        nodeSel = nodeSel
-          .transition()
-          .duration(900)
-          .attr('opacity', (d) => (d.type === 'head' ? 0.95 : 0.78))
-          .selection();
-
-        const forceLink = d3
-          .forceLink(links)
-          .id((d) => d.id)
-          .distance((link) => {
-            if (link.kind === 'tentacle') return 36 + link.segment * 6;
-            if (link.kind === 'tentacle-root') return 48;
-            if (link.kind === 'membrane') return 58;
-            if (link.kind === 'radial') return 42;
-            return 40;
-          })
-          .strength((link) => {
-            if (link.kind === 'tentacle') return 0.85;
-            if (link.kind === 'tentacle-root') return 0.9;
-            if (link.kind === 'membrane') return 0.55;
-            if (link.kind === 'radial') return 0.4;
-            return 0.3;
-          });
-
-        const forceCharge = d3.forceManyBody().strength((node) => (node.type === 'head' ? -22 : -6));
-        const forceCollide = d3
-          .forceCollide()
-          .radius((node) => (node.type === 'head' ? 12 : 6))
-          .iterations(3);
-        const forceX = d3.forceX(width / 2).strength(0.016);
-        const forceY = d3.forceY(height / 2 + 50).strength(0.015);
-
-        const sim = d3
+        const simulation = d3
           .forceSimulation(nodes)
-          .force('link', forceLink)
-          .force('charge', forceCharge)
-          .force('collide', forceCollide)
-          .force('x', forceX)
-          .force('y', forceY)
-          .velocityDecay(0.5)
-          .alphaDecay(0.015)
+          .force(
+            'link',
+            d3
+              .forceLink(links)
+              .id((d) => d.id)
+              .distance(() => randomBetween(34, 62))
+              .strength(0.16)
+          )
+          .force('charge', d3.forceManyBody().strength(-60))
+          .force('collide', d3.forceCollide().radius((d) => d.radius + 4).iterations(3))
+          .force('x', d3.forceX(() => width / 2).strength(0.024))
+          .force('y', d3.forceY(() => height / 2).strength(0.024))
+          .velocityDecay(0.58)
+          .alphaDecay(0.04)
           .on('tick', ticked);
 
-        function anchorAtTime(time) {
-          const ax = width * (0.5 + 0.16 * Math.sin(W1 * time + 0.6));
-          const ay = height * (0.53 + 0.12 * Math.cos(W2 * time + 1.25));
-          return [ax, ay];
+        function updateGraph() {
+          linkSel = linkSel
+            .data(links, (d) => `${getId(d.source)}--${getId(d.target)}`)
+            .join(
+              (enter) =>
+                enter
+                  .append('line')
+                  .attr('class', 'link')
+                  .attr('opacity', 0)
+                  .call((enter) =>
+                    enter
+                      .transition()
+                      .duration(600)
+                      .attr('opacity', () => randomBetween(0.08, 0.22))
+                  ),
+              (update) => update,
+              (exit) => exit.transition().duration(400).attr('opacity', 0).remove()
+            );
+
+          nodeSel = nodeSel
+            .data(nodes, (d) => d.id)
+            .join(
+              (enter) =>
+                enter
+                  .append('circle')
+                  .attr('class', 'node')
+                  .attr('r', 0)
+                  .attr('cx', width / 2)
+                  .attr('cy', height / 2)
+                  .call((enter) =>
+                    enter
+                      .transition()
+                      .duration(720)
+                      .attr('r', (d) => d.radius)
+                  ),
+              (update) => update,
+              (exit) =>
+                exit
+                  .transition()
+                  .duration(420)
+                  .attr('r', 0)
+                  .attr('opacity', 0)
+                  .remove()
+            );
+
+          simulation.nodes(nodes);
+          simulation.force('link').links(links);
+          simulation.alpha(0.65).restart();
         }
 
         function ticked() {
           const time = performance.now() / 1000;
-          const [anchorX, anchorY] = anchorAtTime(time);
-          const bob = 28 * Math.sin(W3 * time + 0.8);
-          forceX.x(anchorX);
-          forceY.y(anchorY + bob);
-
-          const bellPulse = 0.86 + 0.18 * Math.sin(W1 * time);
-          const bellSkew = 0.82 + 0.22 * Math.sin(W2 * time + 0.9);
-
-          nodes.forEach((node) => {
-            if (node.type === 'head') {
-              const wobbleX = node.offsetX * bellSkew;
-              const wobbleY = node.offsetY * bellPulse;
-              const driftX = 18 * Math.sin(W2 * time + node.phase * 0.7);
-              const driftY = 16 * Math.cos(W3 * time + node.phase * 0.9);
-              const targetX = anchorX + wobbleX + driftX;
-              const targetY = anchorY + wobbleY + driftY;
-              node.vx += (targetX - node.x) * 0.0065;
-              node.vy += (targetY - node.y) * 0.0065;
-            } else {
-              const sway = 24 * Math.sin(W2 * time + node.segment * 0.55 + node.phase);
-              const lag = 20 * Math.cos(W3 * time + node.segment * 0.45 + node.phase * 0.5);
-              const stretch = 1 + 0.22 * Math.sin(W1 * time + node.segment * 0.36);
-              const targetX = anchorX + node.offsetX + sway;
-              const targetY = anchorY + node.offsetY * stretch + lag;
-              const spring = 0.018 + node.segment * 0.0025;
-              node.vx += (targetX - node.x) * spring;
-              node.vy += (targetY - node.y) * (spring + 0.002);
-            }
-          });
 
           nodeSel
             .attr('cx', (d) => d.x)
             .attr('cy', (d) => d.y)
-            .attr('r', (d) => {
-              if (d.type === 'head') {
-                const pulse = d.base * (0.92 + 0.16 * Math.sin(W1 * time + d.phase));
-                return Math.max(3.4, Math.min(9.6, pulse));
-              }
-              const ripple = d.base * (0.85 + 0.25 * Math.sin(W2 * time + d.phase + d.segment * 0.3));
-              return Math.max(1.8, Math.min(4.2, ripple));
-            });
+            .attr('r', (d) => d.radius * (0.82 + 0.22 * Math.sin(time * 0.55 + d.pulseOffset)));
 
           linkSel
-            .attr('x1', (d) => d.source.x)
-            .attr('y1', (d) => d.source.y)
-            .attr('x2', (d) => d.target.x)
-            .attr('y2', (d) => d.target.y);
+            .attr('x1', (d) => (typeof d.source === 'object' ? d.source.x : nodes.find((n) => n.id === d.source)?.x ?? 0))
+            .attr('y1', (d) => (typeof d.source === 'object' ? d.source.y : nodes.find((n) => n.id === d.source)?.y ?? 0))
+            .attr('x2', (d) => (typeof d.target === 'object' ? d.target.x : nodes.find((n) => n.id === d.target)?.x ?? 0))
+            .attr('y2', (d) => (typeof d.target === 'object' ? d.target.y : nodes.find((n) => n.id === d.target)?.y ?? 0))
+            .attr('stroke-width', (d) => 1.1 + 0.65 * Math.sin(time * 0.7 + d.shimmerOffset));
         }
 
-        const resize = () => {
+        function addNodeWithLinks() {
+          if (nodes.length >= MAX_NODES) return false;
+          const node = createNode();
+          const available = d3.shuffle(nodes.filter((n) => n !== node));
+          const connections = Math.floor(randomBetween(3, 7));
+          for (let i = 0; i < connections && i < available.length; i++) {
+            connectNodes(node, available[i]);
+          }
+          return true;
+        }
+
+        function removeRandomNode() {
+          if (nodes.length <= MIN_NODES) return false;
+          const index = Math.floor(Math.random() * nodes.length);
+          const [node] = nodes.splice(index, 1);
+          const id = node.id;
+          for (let i = links.length - 1; i >= 0; i--) {
+            const sourceId = getId(links[i].source);
+            const targetId = getId(links[i].target);
+            if (sourceId === id || targetId === id) {
+              links.splice(i, 1);
+            }
+          }
+          return true;
+        }
+
+        function addRandomLink() {
+          if (nodes.length < 2) return false;
+          let attempts = 0;
+          while (attempts < 20) {
+            const a = nodes[Math.floor(Math.random() * nodes.length)];
+            const b = nodes[Math.floor(Math.random() * nodes.length)];
+            if (a !== b && !linkExists(a.id, b.id)) {
+              connectNodes(a, b);
+              return true;
+            }
+            attempts++;
+          }
+          return false;
+        }
+
+        function removeRandomLink() {
+          if (links.length <= nodes.length * 0.6) return false;
+          const index = Math.floor(Math.random() * links.length);
+          links.splice(index, 1);
+          return true;
+        }
+
+        function mutate() {
+          const actions = [
+            addNodeWithLinks,
+            removeRandomNode,
+            addRandomLink,
+            removeRandomLink,
+          ];
+          const choice = actions[Math.floor(Math.random() * actions.length)];
+          const changed = choice();
+          if (changed) {
+            updateGraph();
+          }
+        }
+
+        updateGraph();
+
+        const scheduleMutation = () => {
+          mutate();
+          const delay = randomBetween(1200, 2400);
+          setTimeout(scheduleMutation, delay);
+        };
+        setTimeout(scheduleMutation, 1600);
+
+        const resizeObserver = new ResizeObserver(() => {
           width = svg.node().clientWidth;
           height = svg.node().clientHeight;
-          sim.alpha(0.3).restart();
-        };
-
-        const resizeObserver = new ResizeObserver(resize);
+          simulation.force('x', d3.forceX(() => width / 2).strength(0.024));
+          simulation.force('y', d3.forceY(() => height / 2).strength(0.024));
+          simulation.alpha(0.4).restart();
+        });
         resizeObserver.observe(svg.node());
-
-        d3.timer(() => sim.alphaTarget(0.045));
       })();
     </script>
   </body>
