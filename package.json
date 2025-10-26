@@ -1,0 +1,18 @@
+{
+  "name": "normal-rooms-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static Normal Rooms website with automated smoke tests.",
+  "type": "module",
+  "scripts": {
+    "test": "npm run test:links && npm run test:index && npm run test:search && npm run test:navigation && npm run test:footer",
+    "test:links": "node --test tests/link-health.test.mjs",
+    "test:index": "node --test tests/search-index.test.mjs",
+    "test:search": "node --test tests/search-behavior.test.mjs",
+    "test:navigation": "node --test tests/navigation-toggle.test.mjs",
+    "test:footer": "node --test tests/footer.test.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^24.0.0"
+  }
+}
