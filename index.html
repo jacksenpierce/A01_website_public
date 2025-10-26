@@ -1,299 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title></title>
-    <style>
-      :root {
-        color-scheme: dark;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Normal Rooms</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background-color: #44414a;
+      font-family: 'Helvetica Neue', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        background: radial-gradient(circle at 18% 18%, #120d24 0%, #070616 45%, #01030b 100%);
-        overflow: hidden;
-      }
+    #vanta-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
 
-      svg {
-        display: block;
-        width: 100vw;
-        height: 100vh;
-      }
+    h1 {
+      position: relative;
+      color: #ff773f;
+      font-size: 4rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      z-index: 1;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div id="vanta-bg"></div>
+  <h1>NORMAL ROOMS</h1>
 
-      .link {
-        stroke: rgba(255, 224, 122, 0.18);
-        stroke-width: 1.6;
-        stroke-linecap: round;
-      }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>
+  <script>
+    let vantaEffect = VANTA.NET({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0xff773f,
+      backgroundColor: 0x44414a,
+      points: 15.00,
+      spacing: 18.00,
+      maxDistance: 18.00,
+      showDots: true
+    });
 
-      .node {
-        fill: #ffe066;
-        filter: url(#glow);
-      }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
-  </head>
-  <body>
-    <svg id="stage" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="4.6" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-        <radialGradient id="vignette" cx="50%" cy="50%" r="75%">
-          <stop offset="55%" stop-color="#0000" />
-          <stop offset="100%" stop-color="#000b" />
-        </radialGradient>
-      </defs>
-      <rect x="0" y="0" width="100%" height="100%" fill="#03030a" opacity="0.65" />
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#vignette)" opacity="0.85" />
-    </svg>
-    <script>
-      (function () {
-        const svg = d3.select('#stage');
-        const gLinks = svg.append('g');
-        const gNodes = svg.append('g');
+    // Super-fast continuous rotation around two axes
+    let angleX = 0;
+    let angleY = 0;
+    let rotationSpeedX = 0.05; // X-axis speed
+    let rotationSpeedY = 0.04; // Y-axis speed
 
-        let width = svg.node().clientWidth;
-        let height = svg.node().clientHeight;
-
-        const nodes = [];
-        const links = [];
-        let idCounter = 0;
-
-        const MIN_NODES = 48;
-        const MAX_NODES = 210;
-        const INITIAL_NODES = 140;
-
-        const randomBetween = (min, max) => min + Math.random() * (max - min);
-        const jitter = (range) => (Math.random() - 0.5) * range;
-        const getId = (ref) => (typeof ref === 'object' ? ref.id : ref);
-
-        function createNode(opts = {}) {
-          const node = {
-            id: `n${idCounter++}`,
-            radius: opts.radius ?? randomBetween(10, 26),
-            pulseOffset: Math.random() * Math.PI * 2,
-          };
-          node.x = opts.x ?? width / 2 + jitter(width * 0.35);
-          node.y = opts.y ?? height / 2 + jitter(height * 0.35);
-          node.vx = 0;
-          node.vy = 0;
-          nodes.push(node);
-          return node;
-        }
-
-        function linkExists(aId, bId) {
-          return links.some((link) => {
-            const sourceId = getId(link.source);
-            const targetId = getId(link.target);
-            return (
-              (sourceId === aId && targetId === bId) ||
-              (sourceId === bId && targetId === aId)
-            );
-          });
-        }
-
-        function connectNodes(a, b) {
-          const sourceId = getId(a);
-          const targetId = getId(b);
-          if (sourceId === targetId) return null;
-          if (linkExists(sourceId, targetId)) return null;
-          const link = {
-            source: sourceId,
-            target: targetId,
-            shimmerOffset: Math.random() * Math.PI * 2,
-          };
-          links.push(link);
-          return link;
-        }
-
-        for (let i = 0; i < INITIAL_NODES; i++) {
-          createNode();
-        }
-
-        nodes.forEach((node, index) => {
-          const peers = nodes.filter((_, i) => i !== index);
-          const desired = Math.floor(randomBetween(3, 6));
-          const shuffled = d3.shuffle(peers.slice());
-          for (let i = 0; i < desired; i++) {
-            connectNodes(node, shuffled[i]);
-          }
+    // Function to modulate network geometry dynamically
+    function modulateNetwork() {
+      if (vantaEffect && vantaEffect.particles) {
+        const time = Date.now() * 0.001;
+        vantaEffect.particles.forEach((p, i) => {
+          const offset = i * 0.3;
+          p.position.x += Math.sin(time + offset) * 0.05;
+          p.position.y += Math.cos(time * 1.2 + offset) * 0.05;
         });
+      }
+    }
 
-        let linkSel = gLinks.selectAll('line');
-        let nodeSel = gNodes.selectAll('circle');
+    // Continuous animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      if (vantaEffect && vantaEffect.scene) {
+        modulateNetwork();
+        vantaEffect.scene.rotation.x = angleX;
+        vantaEffect.scene.rotation.y = angleY;
+        angleX += rotationSpeedX;
+        angleY += rotationSpeedY;
+      }
+    }
 
-        const simulation = d3
-          .forceSimulation(nodes)
-          .force(
-            'link',
-            d3
-              .forceLink(links)
-              .id((d) => d.id)
-              .distance(() => randomBetween(84, 140))
-              .strength(0.12)
-          )
-          .force('charge', d3.forceManyBody().strength(-120))
-          .force('collide', d3.forceCollide().radius((d) => d.radius + 8).iterations(3))
-          .force('x', d3.forceX(() => width / 2).strength(0.014))
-          .force('y', d3.forceY(() => height / 2).strength(0.014))
-          .velocityDecay(0.58)
-          .alphaDecay(0.04)
-          .on('tick', ticked);
-
-        function updateGraph() {
-          linkSel = linkSel
-            .data(links, (d) => `${getId(d.source)}--${getId(d.target)}`)
-            .join(
-              (enter) =>
-                enter
-                  .append('line')
-                  .attr('class', 'link')
-                  .attr('opacity', 0)
-                  .call((enter) =>
-                    enter
-                      .transition()
-                      .duration(600)
-                      .attr('opacity', () => randomBetween(0.08, 0.22))
-                  ),
-              (update) => update,
-              (exit) => exit.transition().duration(400).attr('opacity', 0).remove()
-            );
-
-          nodeSel = nodeSel
-            .data(nodes, (d) => d.id)
-            .join(
-              (enter) =>
-                enter
-                  .append('circle')
-                  .attr('class', 'node')
-                  .attr('r', 0)
-                  .attr('cx', width / 2)
-                  .attr('cy', height / 2)
-                  .call((enter) =>
-                    enter
-                      .transition()
-                      .duration(720)
-                      .attr('r', (d) => d.radius)
-                  ),
-              (update) => update,
-              (exit) =>
-                exit
-                  .transition()
-                  .duration(420)
-                  .attr('r', 0)
-                  .attr('opacity', 0)
-                  .remove()
-            );
-
-          simulation.nodes(nodes);
-          simulation.force('link').links(links);
-          simulation.alpha(0.65).restart();
-        }
-
-        function ticked() {
-          const time = performance.now() / 1000;
-
-          nodeSel
-            .attr('cx', (d) => d.x)
-            .attr('cy', (d) => d.y)
-            .attr('r', (d) => d.radius * (0.82 + 0.22 * Math.sin(time * 0.55 + d.pulseOffset)));
-
-          linkSel
-            .attr('x1', (d) => (typeof d.source === 'object' ? d.source.x : nodes.find((n) => n.id === d.source)?.x ?? 0))
-            .attr('y1', (d) => (typeof d.source === 'object' ? d.source.y : nodes.find((n) => n.id === d.source)?.y ?? 0))
-            .attr('x2', (d) => (typeof d.target === 'object' ? d.target.x : nodes.find((n) => n.id === d.target)?.x ?? 0))
-            .attr('y2', (d) => (typeof d.target === 'object' ? d.target.y : nodes.find((n) => n.id === d.target)?.y ?? 0))
-            .attr('stroke-width', (d) => 1.1 + 0.65 * Math.sin(time * 0.7 + d.shimmerOffset));
-        }
-
-        function addNodeWithLinks() {
-          if (nodes.length >= MAX_NODES) return false;
-          const node = createNode();
-          const available = d3.shuffle(nodes.filter((n) => n !== node));
-          const connections = Math.floor(randomBetween(3, 7));
-          for (let i = 0; i < connections && i < available.length; i++) {
-            connectNodes(node, available[i]);
-          }
-          return true;
-        }
-
-        function removeRandomNode() {
-          if (nodes.length <= MIN_NODES) return false;
-          const index = Math.floor(Math.random() * nodes.length);
-          const [node] = nodes.splice(index, 1);
-          const id = node.id;
-          for (let i = links.length - 1; i >= 0; i--) {
-            const sourceId = getId(links[i].source);
-            const targetId = getId(links[i].target);
-            if (sourceId === id || targetId === id) {
-              links.splice(i, 1);
-            }
-          }
-          return true;
-        }
-
-        function addRandomLink() {
-          if (nodes.length < 2) return false;
-          let attempts = 0;
-          while (attempts < 20) {
-            const a = nodes[Math.floor(Math.random() * nodes.length)];
-            const b = nodes[Math.floor(Math.random() * nodes.length)];
-            if (a !== b && !linkExists(a.id, b.id)) {
-              connectNodes(a, b);
-              return true;
-            }
-            attempts++;
-          }
-          return false;
-        }
-
-        function removeRandomLink() {
-          if (links.length <= nodes.length * 0.6) return false;
-          const index = Math.floor(Math.random() * links.length);
-          links.splice(index, 1);
-          return true;
-        }
-
-        function mutate() {
-          const actions = [
-            addNodeWithLinks,
-            removeRandomNode,
-            addRandomLink,
-            removeRandomLink,
-          ];
-          const choice = actions[Math.floor(Math.random() * actions.length)];
-          const changed = choice();
-          if (changed) {
-            updateGraph();
-          }
-        }
-
-        updateGraph();
-
-        const scheduleMutation = () => {
-          mutate();
-          const delay = randomBetween(1200, 2400);
-          setTimeout(scheduleMutation, delay);
-        };
-        setTimeout(scheduleMutation, 1600);
-
-        const resizeObserver = new ResizeObserver(() => {
-          width = svg.node().clientWidth;
-          height = svg.node().clientHeight;
-          simulation.force('x', d3.forceX(() => width / 2).strength(0.024));
-          simulation.force('y', d3.forceY(() => height / 2).strength(0.024));
-          simulation.alpha(0.4).restart();
-        });
-        resizeObserver.observe(svg.node());
-      })();
-    </script>
-  </body>
+    animate();
+  </script>
+</body>
 </html>
