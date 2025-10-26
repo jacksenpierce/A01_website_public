@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NR-LAB-006 · Delta observation window stress test · Normal Rooms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../home.html">
+        <span class="brand-mark" aria-hidden="true">NR</span>
+        <span class="brand-text">Normal Rooms</span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <nav id="primary-navigation" class="site-nav" data-open="false">
+        <ul>
+          <li><a href="../wiki.html">Wiki</a></li>
+          <li><a href="../blog.html">Blog</a></li>
+          <li><a aria-current="page" href="../lab.html">Lab Notebook</a></li>
+          <li><a href="../projects.html">Projects</a></li>
+          <li><a href="../tags.html">Tags</a></li>
+          <li><a href="../search.html">Search</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <article class="container">
+      <header class="lab-detail__header">
+        <p class="lab-detail__meta">NR-LAB-006 · Logged May 22, 2024 · Completed</p>
+        <h1>Delta observation window stress test</h1>
+        <p class="post__tags">
+          Tags: <a class="tag" href="../tags.html#lab">lab</a>, <a class="tag" href="../tags.html#performance">performance</a>
+        </p>
+      </header>
+      <dl class="lab-entry__details">
+        <div>
+          <dt>Aim</dt>
+          <dd>Validate that the static delta visualization remains legible during rapid content updates.</dd>
+        </div>
+        <div>
+          <dt>Method</dt>
+          <dd>Generated synthetic commits in the docs folder and rebuilt the site to monitor visual stability.</dd>
+        </div>
+        <div>
+          <dt>Observations</dt>
+          <dd>Search index rebuilds remained under four seconds; nav anchors preserved focus states.</dd>
+        </div>
+        <div>
+          <dt>Result</dt>
+          <dd>The delta visualization held; no regressions detected.</dd>
+        </div>
+        <div>
+          <dt>Next</dt>
+          <dd>Document the rebuild guardrails in the wiki and reference them from the project hub.</dd>
+        </div>
+      </dl>
+      <footer class="lab-detail__footer">
+        <p>Related project: <a href="../projects.html#project-static-pipeline">Static pipeline hardening</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer__inner">
+      <div>
+        <span class="brand-mark" aria-hidden="true">NR</span>
+        <p>Static-first publishing for Normal Rooms.</p>
+      </div>
+      <nav aria-label="Footer links">
+        <ul class="footer__links">
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+          <li><a href="../donate.html">Support</a></li>
+          <li><a href="../legal.html">Legal</a></li>
+        </ul>
+      </nav>
+      <p class="footer__meta">© <span id="year"></span> Normal Rooms. All static, all the time.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>

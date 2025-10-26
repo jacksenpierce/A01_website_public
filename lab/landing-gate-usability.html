@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NR-LAB-004 · Landing gate usability scan · Normal Rooms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../home.html">
+        <span class="brand-mark" aria-hidden="true">NR</span>
+        <span class="brand-text">Normal Rooms</span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <nav id="primary-navigation" class="site-nav" data-open="false">
+        <ul>
+          <li><a href="../wiki.html">Wiki</a></li>
+          <li><a href="../blog.html">Blog</a></li>
+          <li><a aria-current="page" href="../lab.html">Lab Notebook</a></li>
+          <li><a href="../projects.html">Projects</a></li>
+          <li><a href="../tags.html">Tags</a></li>
+          <li><a href="../search.html">Search</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <article class="container">
+      <header class="lab-detail__header">
+        <p class="lab-detail__meta">NR-LAB-004 · Logged April 29, 2024 · Completed</p>
+        <h1>Landing gate usability scan</h1>
+        <p class="post__tags">
+          Tags: <a class="tag" href="../tags.html#ux">ux</a>, <a class="tag" href="../tags.html#workflow">workflow</a>
+        </p>
+      </header>
+      <dl class="lab-entry__details">
+        <div>
+          <dt>Aim</dt>
+          <dd>Confirm the landing gate improves clarity without blocking known contributors.</dd>
+        </div>
+        <div>
+          <dt>Method</dt>
+          <dd>Ran remote tests with five participants comparing direct vs gated entry to the site.</dd>
+        </div>
+        <div>
+          <dt>Observations</dt>
+          <dd>Participants appreciated the calm aesthetic; no confusion about the ENTER action.</dd>
+        </div>
+        <div>
+          <dt>Result</dt>
+          <dd>Gate retained; copy updated to highlight the site’s three idioms.</dd>
+        </div>
+        <div>
+          <dt>Next</dt>
+          <dd>Roll the copy updates into the landing page and document the decision in the wiki.</dd>
+        </div>
+      </dl>
+      <footer class="lab-detail__footer">
+        <p>Referenced in: <a href="../blog/welcome.html">Welcome to Normal Rooms</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer__inner">
+      <div>
+        <span class="brand-mark" aria-hidden="true">NR</span>
+        <p>Static-first publishing for Normal Rooms.</p>
+      </div>
+      <nav aria-label="Footer links">
+        <ul class="footer__links">
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+          <li><a href="../donate.html">Support</a></li>
+          <li><a href="../legal.html">Legal</a></li>
+        </ul>
+      </nav>
+      <p class="footer__meta">© <span id="year"></span> Normal Rooms. All static, all the time.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>

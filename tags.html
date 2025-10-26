@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Normal Rooms · Tags</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="home.html">
+        <span class="brand-mark" aria-hidden="true">NR</span>
+        <span class="brand-text">Normal Rooms</span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <nav id="primary-navigation" class="site-nav" data-open="false">
+        <ul>
+          <li><a href="wiki.html">Wiki</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="lab.html">Lab Notebook</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a aria-current="page" href="tags.html">Tags</a></li>
+          <li><a href="search.html">Search</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="tags">
+    <div class="container">
+      <header class="page-header">
+        <p class="eyebrow">Vocabulary</p>
+        <h1>Tags</h1>
+        <p>A shared language applied across wiki, blog, lab, and project content.</p>
+      </header>
+
+      <section class="tags__cloud" aria-label="All tags">
+        <a class="tag" href="#tag-architecture">architecture</a>
+        <a class="tag" href="#tag-workflow">workflow</a>
+        <a class="tag" href="#tag-lab">lab</a>
+        <a class="tag" href="#tag-quality">quality</a>
+        <a class="tag" href="#tag-search">search</a>
+        <a class="tag" href="#tag-performance">performance</a>
+        <a class="tag" href="#tag-governance">governance</a>
+        <a class="tag" href="#tag-ux">ux</a>
+        <a class="tag" href="#tag-announcement">announcement</a>
+        <a class="tag" href="#tag-build">build</a>
+        <a class="tag" href="#tag-projects">projects</a>
+        <a class="tag" href="#tag-process">process</a>
+        <a class="tag" href="#tag-static">static</a>
+      </section>
+
+      <section class="tags__groups" aria-label="Tag details">
+        <article class="tag-group" id="tag-architecture">
+          <h2>architecture</h2>
+          <ul class="list">
+            <li><a href="wiki.html#foundations">Foundations</a> · Wiki</li>
+            <li><a href="projects.html#project-static-pipeline">Static pipeline hardening</a> · Project</li>
+          </ul>
+        </article>
+
+        <article class="tag-group" id="tag-workflow">
+          <h2>workflow</h2>
+          <ul class="list">
+            <li><a href="wiki.html#publishing">Publishing workflow</a> · Wiki</li>
+            <li><a href="blog/aligning-static-workflows.html">Aligning static workflows with research cadence</a> · Blog</li>
+            <li><a href="lab/landing-gate-usability.html">NR-LAB-004 · Landing gate usability scan</a> · Lab</li>
+          </ul>
+        </article>
+
+        <article class="tag-group" id="tag-lab">
+          <h2>lab</h2>
+          <ul class="list">
+            <li><a href="blog/aligning-static-workflows.html">Aligning static workflows with research cadence</a> · Blog</li>
+            <li><a href="blog/lab-index-release.html">Publishing the first unified lab index</a> · Blog</li>
+            <li><a href="lab/delta-observation-window.html">NR-LAB-006 · Delta observation window stress test</a> · Lab</li>
+          </ul>
+        </article>
+
+        <article class="tag-group" id="tag-quality">
+          <h2>quality</h2>
+          <ul class="list">
+            <li><a href="wiki.html#publishing">Publishing workflow</a> · Wiki</li>
+            <li><a href="blog/lab-index-release.html">Publishing the first unified lab index</a> · Blog</li>
+            <li><a href="lab/search-prototype-benchmark.html">NR-LAB-005 · Client-side search prototype benchmark</a> · Lab</li>
+          </ul>
+        </article>
+
+        <article class="tag-group" id="tag-search">
+          <h2>search</h2>
+          <ul class="list">
+            <li><a href="lab/search-prototype-benchmark.html">NR-LAB-005 · Client-side search prototype benchmark</a> · Lab</li>
+            <li><a href="projects.html#project-static-pipeline">Static pipeline hardening</a> · Project</li>
+            <li><a href="search.html">Search index</a> · Search</li>
+          </ul>
+        </article>
+
+        <article class="tag-group" id="tag-performance">
+          <h2>performance</h2>
+          <ul class="list">
+            <li><a href="lab/delta-observation-window.html">NR-LAB-006 · Delta observation window stress test</a> · Lab</li>
+          </ul>
+        </article>
+
+        <article class="tag-group" id="tag-governance">
+          <h2>governance</h2>
+          <ul class="list">
+            <li><a href="wiki.html#governance">Governance</a> · Wiki</li>
+            <li><a href="projects.html#project-knowledge-graph">Knowledge graph curation</a> · Project</li>
+          </ul>
+        </article>
+
+        <article class="tag-group" id="tag-ux">
+          <h2>ux</h2>
+          <ul class="list">
+            <li><a href="lab/landing-gate-usability.html">NR-LAB-004 · Landing gate usability scan</a> · Lab</li>
+            <li><a href="projects.html#project-landing-experience">Landing experience refresh</a> · Project</li>
+          </ul>
+        </article>
+
+        <article class="tag-group" id="tag-announcement">
+          <h2>announcement</h2>
+          <ul class="list">
+            <li><a href="blog/welcome.html">Welcome to Normal Rooms</a> · Blog</li>
+            <li><a href="projects.html#project-landing-experience">Landing experience refresh</a> · Project</li>
+          </ul>
+        </article>
+
+        <article class="tag-group" id="tag-build">
+          <h2>build</h2>
+          <ul class="list">
+            <li><a href="wiki.html#publishing">Publishing workflow</a> · Wiki</li>
+            <li><a href="projects.html#project-static-pipeline">Static pipeline hardening</a> · Project</li>
+          </ul>
+        </article>
+
+        <article class="tag-group" id="tag-projects">
+          <h2>projects</h2>
+          <ul class="list">
+            <li><a href="wiki.html#architecture">Architecture</a> · Wiki</li>
+            <li><a href="projects.html">Projects hub</a> · Projects</li>
+          </ul>
+        </article>
+
+        <article class="tag-group" id="tag-process">
+          <h2>process</h2>
+          <ul class="list">
+            <li><a href="wiki.html#governance">Governance</a> · Wiki</li>
+          </ul>
+        </article>
+
+        <article class="tag-group" id="tag-static">
+          <h2>static</h2>
+          <ul class="list">
+            <li><a href="wiki.html#architecture">Architecture</a> · Wiki</li>
+            <li><a href="blog/lab-index-release.html">Publishing the first unified lab index</a> · Blog</li>
+          </ul>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer__inner">
+      <div>
+        <span class="brand-mark" aria-hidden="true">NR</span>
+        <p>Static-first publishing for Normal Rooms.</p>
+      </div>
+      <nav aria-label="Footer links">
+        <ul class="footer__links">
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="donate.html">Support</a></li>
+          <li><a href="legal.html">Legal</a></li>
+        </ul>
+      </nav>
+      <p class="footer__meta">© <span id="year"></span> Normal Rooms. All static, all the time.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
