@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Normal Rooms · Projects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="home.html">
+        <span class="brand-mark" aria-hidden="true">NR</span>
+        <span class="brand-text">Normal Rooms</span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <nav id="primary-navigation" class="site-nav" data-open="false">
+        <ul>
+          <li><a href="wiki.html">Wiki</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="lab.html">Lab Notebook</a></li>
+          <li><a aria-current="page" href="projects.html">Projects</a></li>
+          <li><a href="tags.html">Tags</a></li>
+          <li><a href="search.html">Search</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="projects">
+    <div class="container">
+      <header class="page-header">
+        <p class="eyebrow">Hubs</p>
+        <h1>Projects</h1>
+        <p>Stable project hubs summarizing goals and linking to related work across the site.</p>
+      </header>
+
+      <section class="grid grid--three">
+        <article class="card card--project" id="project-static-pipeline">
+          <h2>Static pipeline hardening</h2>
+          <p>
+            Fortify the static build pipeline with reproducible checks, ensuring every deploy includes
+            search index updates and link validation.
+          </p>
+          <dl class="card__meta">
+            <div>
+              <dt>Related wiki</dt>
+              <dd><a href="wiki.html#publishing">Publishing workflow</a></dd>
+            </div>
+            <div>
+              <dt>Blog posts</dt>
+              <dd><a href="blog/aligning-static-workflows.html">Aligning static workflows</a></dd>
+            </div>
+            <div>
+              <dt>Lab entries</dt>
+              <dd><a href="lab/search-prototype-benchmark.html">NR-LAB-005</a></dd>
+            </div>
+            <div>
+              <dt>Tags</dt>
+              <dd><a class="tag" href="tags.html#build">build</a> <a class="tag" href="tags.html#quality">quality</a></dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="card card--project" id="project-knowledge-graph">
+          <h2>Knowledge graph curation</h2>
+          <p>
+            Establish a sustainable taxonomy for wiki topics, experiment IDs, and project identifiers
+            to keep cross-linking accurate.
+          </p>
+          <dl class="card__meta">
+            <div>
+              <dt>Related wiki</dt>
+              <dd><a href="wiki.html#governance">Governance</a></dd>
+            </div>
+            <div>
+              <dt>Blog posts</dt>
+              <dd><a href="blog/welcome.html">Welcome to Normal Rooms</a></dd>
+            </div>
+            <div>
+              <dt>Lab entries</dt>
+              <dd><a href="lab/landing-gate-usability.html">NR-LAB-004</a></dd>
+            </div>
+            <div>
+              <dt>Tags</dt>
+              <dd><a class="tag" href="tags.html#governance">governance</a> <a class="tag" href="tags.html#workflow">workflow</a></dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="card card--project" id="project-landing-experience">
+          <h2>Landing experience refresh</h2>
+          <p>
+            Maintain a calm gray-and-orange gate that sets the tone for the knowledge base while
+            keeping access frictionless.
+          </p>
+          <dl class="card__meta">
+            <div>
+              <dt>Related wiki</dt>
+              <dd><a href="wiki.html#foundations">Foundations</a></dd>
+            </div>
+            <div>
+              <dt>Blog posts</dt>
+              <dd><a href="blog/lab-index-release.html">Unified lab index release</a></dd>
+            </div>
+            <div>
+              <dt>Lab entries</dt>
+              <dd><a href="lab/landing-gate-usability.html">NR-LAB-004</a></dd>
+            </div>
+            <div>
+              <dt>Tags</dt>
+              <dd><a class="tag" href="tags.html#ux">ux</a> <a class="tag" href="tags.html#announcement">announcement</a></dd>
+            </div>
+          </dl>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer__inner">
+      <div>
+        <span class="brand-mark" aria-hidden="true">NR</span>
+        <p>Static-first publishing for Normal Rooms.</p>
+      </div>
+      <nav aria-label="Footer links">
+        <ul class="footer__links">
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="donate.html">Support</a></li>
+          <li><a href="legal.html">Legal</a></li>
+        </ul>
+      </nav>
+      <p class="footer__meta">© <span id="year"></span> Normal Rooms. All static, all the time.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

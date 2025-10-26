@@ -1,96 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Normal Rooms</title>
-  <style>
-    html, body {
-      margin: 0;
-      height: 100%;
-      overflow: hidden;
-      background-color: #44414a;
-      font-family: 'Helvetica Neue', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #vanta-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-    }
-
-    h1 {
-      position: relative;
-      color: #ff773f;
-      font-size: 4rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      z-index: 1;
-      text-transform: uppercase;
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <div id="vanta-bg"></div>
-  <h1>NORMAL ROOMS</h1>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>
-  <script>
-    let vantaEffect = VANTA.NET({
-      el: "#vanta-bg",
-      mouseControls: true,
-      touchControls: true,
-      gyroControls: false,
-      minHeight: 200.00,
-      minWidth: 200.00,
-      scale: 1.00,
-      scaleMobile: 1.00,
-      color: 0xff773f,
-      backgroundColor: 0x44414a,
-      points: 15.00,
-      spacing: 18.00,
-      maxDistance: 18.00,
-      showDots: true
-    });
-
-    // Super-fast continuous rotation around two axes
-    let angleX = 0;
-    let angleY = 0;
-    let rotationSpeedX = 0.005; // X-axis speed
-    let rotationSpeedY = 0.004; // Y-axis speed
-
-    // Function to modulate network geometry dynamically
-    function modulateNetwork() {
-      if (vantaEffect && vantaEffect.particles) {
-        const time = Date.now() * 0.001;
-        vantaEffect.particles.forEach((p, i) => {
-          const offset = i * 0.3;
-          p.position.x += Math.sin(time + offset) * 0.05;
-          p.position.y += Math.cos(time * 1.2 + offset) * 0.05;
-        });
-      }
-    }
-
-    // Continuous animation loop
-    function animate() {
-      requestAnimationFrame(animate);
-      if (vantaEffect && vantaEffect.scene) {
-        modulateNetwork();
-        vantaEffect.scene.rotation.x = angleX;
-        vantaEffect.scene.rotation.y = angleY;
-        angleX += rotationSpeedX;
-        angleY += rotationSpeedY;
-      }
-    }
-
-    animate();
-  </script>
+<body class="landing">
+  <main class="landing__wrap" aria-labelledby="site-title">
+    <div class="landing__frame">
+      <span class="landing__tag">Normal Rooms</span>
+      <h1 id="site-title">Documentation, updates, and lab notes in one calm space.</h1>
+      <p class="landing__copy">
+        A minimal, static hub for the Normal Rooms project. Explore the wiki, read the latest
+        updates, and review structured experiment logs—everything generated ahead of time and
+        ready for GitHub Pages.
+      </p>
+      <a class="button landing__cta" href="home.html">Enter</a>
+    </div>
+  </main>
 </body>
 </html>

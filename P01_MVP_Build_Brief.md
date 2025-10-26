@@ -1,7 +1,7 @@
 # P01 MVP Build Brief: Docusaurus Static Knowledge Site
 
 ## 1. Purpose
-Deliver a static, GitHub Pages–friendly Docusaurus site that unifies three content idioms—Wiki (reference), Blog (chronological updates), and Lab Notebook (structured experiment entries)—plus lightweight project hubs. The site must be simple, deterministic to build, and extensible without rewriting content. All artifacts are generated at build time with no runtime fetching.
+Deliver a static, GitHub Pages–friendly Docusaurus site that unifies three content idioms—Wiki (reference), Blog (chronological updates), and Lab Notebook (structured experiment entries)—plus lightweight project hubs. The site must be simple, deterministic to build, and extensible without rewriting content. All artifacts are generated at build time with no runtime fetching. The visual tone embraces a minimal, modern gray-and-orange palette with restrained typography.
 
 ## 2. Non-Negotiable Constraints
 1. **Static generation only** – Every page, index, and search artifact is produced during `docusaurus build`. Client-side behavior operates solely on prebuilt data.
@@ -12,7 +12,7 @@ Deliver a static, GitHub Pages–friendly Docusaurus site that unifies three con
 6. **Stable, human-readable links** – Adopt predictable slugs. Integrate the official link checker (`docusaurus-lint-links`) into CI before publish.
 
 ## 3. Information Architecture & Routing
-- **Top-level routes**: `/` (landing), `/docs` (wiki + projects), `/blog` (updates), `/lab` (lab notebook), `/tags` (aggregate tag pages), `/search` (client-side search UI), `/contact`, `/donate`, `/legal`.
+- **Top-level routes**: `/` (landing with ENTER gate), `/home` (interior landing), `/docs` (wiki + projects), `/blog` (updates), `/lab` (lab notebook), `/tags` (aggregate tag pages), `/search` (client-side search UI), `/contact`, `/donate`, `/legal`.
 - **Wiki & projects**: Organized under `/docs`, with sidebars grouping evergreen topics and project hubs.
 - **Blog**: Uses built-in blog plugin for chronological posts with archives and tag filtering.
 - **Lab notebook**: Custom docs plugin instance (e.g., second docs plugin) at `/lab` with its own sidebar hierarchy.
@@ -62,7 +62,8 @@ root/
 │  │  └─ ProjectRelatedList.tsx (shared list component)
 │  ├─ css/ (light theme overrides)
 │  └─ pages/
-│     ├─ index.tsx (landing page)
+│     ├─ index.tsx (landing gate with ENTER interaction)
+│     ├─ home.tsx (interior landing page)
 │     ├─ search.tsx (search interface wired to static index)
 │     ├─ contact.md
 │     ├─ donate.md
@@ -75,11 +76,12 @@ root/
 
 ## 6. Feature Breakdown
 
-### 6.1 Landing Page (`/`)
-- Present one-sentence purpose.
-- Highlight three CTA cards: Wiki, Blog, Lab. Each links to respective index.
-- Optional “Recent” list (3 items max) populated from statically generated JSON built during build.
-- Light hero styling via theme custom CSS; ensure readable without JS.
+### 6.1 Landing Page (`/` + `/home`)
+- `/` presents a sparse, centered layout in gray and orange with a single "ENTER" call-to-action (button or link) and the one-sentence purpose beneath it. Minimal animation (e.g., hover color shift) only.
+- The ENTER interaction navigates to `/home`, which contains the interior landing content and is directly addressable.
+- `/home` repeats the purpose statement, highlights three CTA cards (Wiki, Blog, Lab) with short descriptions, and links to respective indexes.
+- An optional “Recent” list (max three items) may appear on `/home` if populated from statically generated JSON produced during the build; otherwise link to full lists.
+- Ensure both `/` and `/home` remain fully readable without JavaScript and respect the gray/orange palette via lightweight CSS overrides.
 
 ### 6.2 Wiki (`/docs`)
 - Use Docusaurus classic preset docs plugin.
@@ -113,7 +115,7 @@ root/
 - Configure tag routes to display aggregated items across idioms using prebuilt metadata (e.g., `generated/tag-maps.json`).
 
 ### 6.8 Navigation Chrome
-- Header: persistent links to Wiki, Blog, Lab, Search.
+- Header: persistent links to Home, Wiki, Blog, Lab, Search.
 - Footer: sections for About, Contact, Support, Legal. All pages static.
 - Use theme `NavbarItem` configuration; keep styling minimal.
 

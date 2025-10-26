@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aligning static workflows with research cadence · Normal Rooms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../home.html">
+        <span class="brand-mark" aria-hidden="true">NR</span>
+        <span class="brand-text">Normal Rooms</span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <nav id="primary-navigation" class="site-nav" data-open="false">
+        <ul>
+          <li><a href="../wiki.html">Wiki</a></li>
+          <li><a aria-current="page" href="../blog.html">Blog</a></li>
+          <li><a href="../lab.html">Lab Notebook</a></li>
+          <li><a href="../projects.html">Projects</a></li>
+          <li><a href="../tags.html">Tags</a></li>
+          <li><a href="../search.html">Search</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="post">
+    <article class="container">
+      <header class="post__header">
+        <p class="post__meta">May 24, 2024 · Update</p>
+        <h1>Aligning static workflows with research cadence</h1>
+        <p class="post__tags">
+          Tags: <a class="tag" href="../tags.html#workflow">workflow</a>,
+          <a class="tag" href="../tags.html#lab">lab</a>
+        </p>
+      </header>
+      <div class="post__content">
+        <p>
+          Our latest build closed the gap between experiment logging and public documentation. Lab
+          entries now trigger wiki cross-links during the static build, and the project hubs track the
+          same metadata.
+        </p>
+        <p>
+          We automated link validation across wiki anchors, project hubs, and lab entry IDs, keeping
+          everything consistent without manual sweeps.
+        </p>
+      </div>
+      <footer class="post__footer">
+        <p>Related lab entry: <a href="../lab/search-prototype-benchmark.html">NR-LAB-005</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer__inner">
+      <div>
+        <span class="brand-mark" aria-hidden="true">NR</span>
+        <p>Static-first publishing for Normal Rooms.</p>
+      </div>
+      <nav aria-label="Footer links">
+        <ul class="footer__links">
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+          <li><a href="../donate.html">Support</a></li>
+          <li><a href="../legal.html">Legal</a></li>
+        </ul>
+      </nav>
+      <p class="footer__meta">© <span id="year"></span> Normal Rooms. All static, all the time.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>
