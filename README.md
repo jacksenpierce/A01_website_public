@@ -1,3 +1,25 @@
-# Work Bench Landing Page
+# Normal Rooms static site
 
-Single-page marketing site for Work Bench, showcasing product features, testimonials, pricing, and a demo request form. Open `index.html` in your browser to view the experience.
+This repository contains the public, static Normal Rooms website. Open any of the HTML files (for example `home.html`) in a browser to explore the content locally.
+
+## Local development
+
+No build step is required. Edit the HTML, CSS, or JavaScript files and refresh your browser to see updates.
+
+## Smoke tests
+
+A small automated test suite verifies critical behaviors:
+
+- Internal links resolve without 404s.
+- The prebuilt search index is well-formed and renders results in the search UI.
+- The responsive navigation toggle updates its accessibility attributes.
+- The global footer shows the current year and required navigation links.
+
+Run the full suite with:
+
+```bash
+npm install
+npm test
+```
+
+Each script can also be invoked individually (for example `npm run test:links`) if you want to focus on a specific check.
