@@ -1,0 +1,63 @@
+{
+  "domains": {
+    "Infrastructure": {
+      "description": "Systems work that keeps the static pipeline resilient and observable.",
+      "order": 1
+    },
+    "Knowledge graph": {
+      "description": "Taxonomy, governance, and relational structure for the knowledge base.",
+      "order": 2
+    },
+    "Experience": {
+      "description": "Presentation, interaction, and entry-point experiments for the site.",
+      "order": 3
+    }
+  },
+  "projects": [
+    {
+      "slug": "static-pipeline-hardening",
+      "title": "Static pipeline hardening",
+      "domain": "Infrastructure",
+      "sequence": 1,
+      "summary": "Fortify the static build pipeline with reproducible checks so every deploy ships with fresh search data and validated links.",
+      "updated": "2024-05-24",
+      "tags": ["build", "quality"],
+      "contentPath": "content/projects/static-pipeline-hardening.html",
+      "spotlight": [
+        {"label": "Wiki", "title": "Publishing checklist", "url": "../wiki/article.html?doc=publishing-checklist"},
+        {"label": "Blog", "title": "Aligning static workflows", "url": "../blog/post.html?slug=aligning-static-workflows"},
+        {"label": "Log", "title": "NR-LAB-005 search benchmark", "url": "../../lab/search-prototype-benchmark.html"}
+      ]
+    },
+    {
+      "slug": "knowledge-graph-curation",
+      "title": "Knowledge graph curation",
+      "domain": "Knowledge graph",
+      "sequence": 1,
+      "summary": "Establish a sustainable taxonomy for wiki topics, experiment IDs, and project identifiers to keep cross-linking accurate.",
+      "updated": "2024-05-20",
+      "tags": ["governance", "workflow"],
+      "contentPath": "content/projects/knowledge-graph-curation.html",
+      "spotlight": [
+        {"label": "Wiki", "title": "Architecture overview", "url": "../wiki/article.html?doc=architecture-overview"},
+        {"label": "Blog", "title": "Welcome to Normal Rooms", "url": "../blog/post.html?slug=welcome"},
+        {"label": "Log", "title": "NR-LAB-004 landing gate study", "url": "../../lab/landing-gate-usability.html"}
+      ]
+    },
+    {
+      "slug": "landing-experience-refresh",
+      "title": "Landing experience refresh",
+      "domain": "Experience",
+      "sequence": 1,
+      "summary": "Maintain a calm gray-and-orange entry point that sets the tone while keeping access frictionless across devices.",
+      "updated": "2024-04-29",
+      "tags": ["ux", "workflow"],
+      "contentPath": "content/projects/landing-experience-refresh.html",
+      "spotlight": [
+        {"label": "Wiki", "title": "Normal Rooms overview", "url": "../wiki/article.html?doc=normal-rooms"},
+        {"label": "Blog", "title": "Lab index release", "url": "../blog/post.html?slug=lab-index-release"},
+        {"label": "Log", "title": "NR-LAB-004 landing gate study", "url": "../../lab/landing-gate-usability.html"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Normal Rooms · Project</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Linux+Libertine:wght@400;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/base.css" />
+    <link rel="stylesheet" href="../../assets/css/modules.css" />
+    <link rel="stylesheet" href="../../assets/css/projects.css" />
+  </head>
+  <body class="skin-projects">
+    <header class="module-hero">
+      <div class="module-hero__inner">
+        <div>
+          <a class="module-hero__brand" href="../../index.html">Normal Rooms</a>
+          <p class="module-hero__tag">Projects module</p>
+          <h1 class="module-hero__title">Domain projection detail</h1>
+          <p class="module-hero__lead">
+            Project pages show the curated slice of documents, experiments, and wiki anchors that describe ongoing work
+            within a domain.
+          </p>
+        </div>
+        <div class="module-hero__cta">
+          <a class="button" href="index.html">Back to projects</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="module-shell module-shell--two-column" aria-label="Project detail">
+      <article id="project-detail" class="module-detail" aria-live="polite">
+        <header>
+          <p class="module-detail__meta">
+            <span id="project-domain"></span>
+            <span class="module-timestamp" id="project-updated"></span>
+          </p>
+          <h1 id="project-title"></h1>
+          <p id="project-summary"></p>
+          <div class="tag-list" id="project-tags"></div>
+        </header>
+        <div id="project-body" class="module-detail__body"></div>
+        <section class="module-detail__related" aria-label="Related surfaces">
+          <h2>Related surfaces</h2>
+          <ul id="project-related"></ul>
+        </section>
+      </article>
+      <aside class="module-sidebar" aria-label="Project navigation">
+        <section>
+          <h2>Project sequence</h2>
+          <ul id="project-sequence"></ul>
+        </section>
+        <section>
+          <h2>Other domains</h2>
+          <ul id="project-domains"></ul>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="projects-footer">
+      <div class="projects-footer__inner">
+        <p>Content from <code>content/projects</code>. Updated <span id="projects-updated">—</span>.</p>
+      </div>
+    </footer>
+
+    <script src="../../assets/js/site.js"></script>
+    <script src="../../assets/js/projects.js" type="module"></script>
+  </body>
+</html>

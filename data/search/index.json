@@ -60,33 +60,33 @@
     "tags": ["lab", "performance"]
   },
   {
-    "title": "NR-LAB-005 · Client-side search prototype benchmark",
-    "description": "Benchmarking latency for the static search index.",
-    "url": "lab/search-prototype-benchmark.html",
-    "tags": ["lab", "search", "quality"]
+    "title": "Project log · Static pipeline hardening (NR-LAB-005)",
+    "description": "Benchmarking latency for the static search index as part of the infrastructure sequence.",
+    "url": "modules/projects/project.html?slug=static-pipeline-hardening",
+    "tags": ["project", "search", "quality"]
   },
   {
-    "title": "NR-LAB-004 · Landing gate usability scan",
-    "description": "Testing the clarity and tone of the new landing gate.",
-    "url": "lab/landing-gate-usability.html",
-    "tags": ["lab", "ux", "workflow"]
+    "title": "Project log · Landing gate usability (NR-LAB-004)",
+    "description": "Testing the clarity and tone of the entry experience within the experience domain.",
+    "url": "modules/projects/project.html?slug=landing-experience-refresh",
+    "tags": ["project", "ux", "workflow"]
   },
   {
     "title": "Static pipeline hardening",
     "description": "Project hub connecting build improvements across idioms.",
-    "url": "projects.html#project-static-pipeline",
+    "url": "modules/projects/project.html?slug=static-pipeline-hardening",
     "tags": ["project", "build", "quality"]
   },
   {
     "title": "Knowledge graph curation",
     "description": "Taxonomy stewardship for tags, projects, and experiments.",
-    "url": "projects.html#project-knowledge-graph",
+    "url": "modules/projects/project.html?slug=knowledge-graph-curation",
     "tags": ["project", "governance", "workflow"]
   },
   {
     "title": "Landing experience refresh",
     "description": "Maintaining the gray-and-orange gate experience.",
-    "url": "projects.html#project-landing-experience",
+    "url": "modules/projects/project.html?slug=landing-experience-refresh",
     "tags": ["project", "ux", "announcement"]
   }
 ]

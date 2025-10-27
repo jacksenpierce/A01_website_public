@@ -1,163 +1,108 @@
-body.skin-blog {
-  background: #f4f6fb;
-  color: #1f2933;
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+body.skin-blog a {
+  color: var(--accent);
 }
 
-.blog-hero {
-  background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-  color: #f9fafb;
-  padding: 64px 24px;
+body.skin-blog a:hover,
+body.skin-blog a:focus {
+  color: #ffa47a;
 }
 
-.blog-hero--compact {
-  padding: 32px 24px;
-}
-
-.blog-hero__inner {
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-.blog-hero .brand {
-  color: inherit;
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  text-decoration: none;
-}
-
-.blog-hero h1 {
-  margin: 12px 0;
-  font-size: clamp(2.5rem, 5vw, 3.25rem);
-}
-
-.blog-hero__lead {
-  max-width: 540px;
-  font-size: 1.05rem;
-  color: rgba(249, 250, 251, 0.82);
-}
-
-.blog-shell {
-  max-width: 960px;
-  margin: -40px auto 0;
-  padding: 0 24px 64px;
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
-  gap: 32px;
-}
-
-.blog-shell--article {
-  margin-top: -24px;
-}
-
-.blog-list ul,
-.blog-sidebar ul {
+.blog-list ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
 }
 
 .blog-card {
-  background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  padding: 24px;
-  margin-bottom: 24px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  display: grid;
+  gap: 0.75rem;
 }
 
 .blog-card__meta {
   font-size: 0.85rem;
-  color: #4b5563;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  margin-bottom: 12px;
+  color: var(--text-muted);
 }
 
-.blog-card h2 {
-  margin: 0 0 12px;
-  font-size: 1.5rem;
+.blog-card__title {
+  margin: 0;
 }
 
-.blog-card p {
-  color: #1f2933;
-  margin: 0 0 12px;
+.blog-card__title a {
+  color: var(--text);
+}
+
+.blog-card__summary {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.6;
 }
 
 .blog-card__tags {
   font-size: 0.85rem;
-  color: #4b5563;
-}
-
-.blog-sidebar section {
-  background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.blog-sidebar h2 {
-  font-size: 1rem;
-  margin-top: 0;
-}
-
-.blog-sidebar a {
-  color: #2563eb;
-  text-decoration: none;
-}
-
-.blog-sidebar a:hover,
-.blog-sidebar a:focus {
-  text-decoration: underline;
-}
-
-.blog-post {
-  background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  padding: 32px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-}
-
-.blog-post__header {
-  margin-bottom: 24px;
-}
-
-.blog-post h1 {
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  margin-bottom: 8px;
+  color: var(--accent);
 }
 
 .blog-post .post-meta {
-  font-size: 0.95rem;
-  color: #6b7280;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  color: var(--text-muted);
+}
+
+.blog-post h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 4vw, 2.8rem);
 }
 
 .blog-post p {
-  font-size: 1.05rem;
+  color: var(--text-muted);
   line-height: 1.75;
-  color: #1f2933;
+  font-size: 1rem;
+}
+
+.blog-post ul,
+.blog-post ol {
+  color: var(--text-muted);
+  padding-left: 1.5rem;
+  line-height: 1.65;
 }
 
 .blog-footer {
-  max-width: 960px;
-  margin: 32px auto 64px;
-  padding: 0 24px;
-  color: #4b5563;
-  font-size: 0.9rem;
+  padding: clamp(2rem, 5vw, 3rem) 1.5rem clamp(3rem, 6vw, 4rem);
 }
 
-@media (max-width: 900px) {
-  .blog-shell {
-    grid-template-columns: 1fr;
-  }
+.blog-footer__inner {
+  max-width: var(--module-max-width);
+  margin: 0 auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: grid;
+  gap: 0.75rem;
+}
 
-  .blog-sidebar {
-    order: -1;
-  }
+.module-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.module-sidebar li {
+  color: var(--text-muted);
+}
+
+#blog-related li a {
+  color: var(--text);
+}
+
+#blog-related li a:hover,
+#blog-related li a:focus {
+  color: var(--accent);
 }
