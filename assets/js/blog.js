@@ -2,6 +2,7 @@ const postList = document.querySelector('#blog-post-list');
 const archivesList = document.querySelector('#blog-archives');
 const postContainer = document.querySelector('#blog-post');
 const relatedPosts = document.querySelector('#blog-related');
+const latestNote = document.querySelector('#blog-latest-note');
 
 if (postList || postContainer) {
   initBlog();
@@ -20,6 +21,10 @@ async function initBlog() {
 
     if (archivesList) {
       renderArchives(posts);
+    }
+
+    if (latestNote) {
+      updateLatestNote(posts);
     }
 
     if (postContainer) {
@@ -48,19 +53,17 @@ function renderPostList(posts) {
 
   posts.forEach((post) => {
     const item = document.createElement('li');
-    item.className = 'blog-card';
+    item.className = 'module-card blog-card';
     const monthKey = post.date ? post.date.slice(0, 7) : null;
     if (monthKey && !seenMonths.has(monthKey)) {
       item.id = monthKey;
       seenMonths.add(monthKey);
     }
     item.innerHTML = `
-      <article>
-        <p class="blog-card__meta">${formatDate(post.date)} · ${post.type}</p>
-        <h2><a href="post.html?slug=${post.slug}">${post.title}</a></h2>
-        <p>${post.summary}</p>
-        <p class="blog-card__tags">${post.tags.map((tag) => `#${tag}`).join(' ')}</p>
-      </article>
+      <div class="module-card__meta blog-card__meta">${formatDate(post.date)} · ${post.type}</div>
+      <h3 class="module-card__title blog-card__title"><a href="post.html?slug=${post.slug}">${post.title}</a></h3>
+      <p class="module-card__description blog-card__summary">${post.summary}</p>
+      <div class="module-card__tags blog-card__tags">${post.tags.map((tag) => `#${tag}`).join(' ')}</div>
     `;
     postList.appendChild(item);
   });
@@ -133,6 +136,16 @@ function renderRelatedPosts(currentSlug, posts) {
     item.innerHTML = `<a href="post.html?slug=${post.slug}">${post.title}</a>`;
     relatedPosts.appendChild(item);
   });
+}
+
+function updateLatestNote(posts) {
+  if (!posts.length) {
+    latestNote.textContent = 'No posts published yet.';
+    return;
+  }
+
+  const [latest] = posts;
+  latestNote.textContent = `Latest update ${formatDate(latest.date)} · ${latest.type}`;
 }
 
 function formatDate(input) {

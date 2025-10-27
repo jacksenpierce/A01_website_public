@@ -11,38 +11,52 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../../assets/css/base.css" />
+    <link rel="stylesheet" href="../../assets/css/modules.css" />
     <link rel="stylesheet" href="../../assets/css/blog.css" />
   </head>
   <body class="skin-blog">
-    <header class="blog-hero">
-      <div class="blog-hero__inner">
-        <a class="brand" href="../../index.html">Normal Rooms</a>
-        <h1>Blog</h1>
-        <p class="blog-hero__lead">Updates, release notes, and announcements from the Normal Rooms team.</p>
+    <header class="module-hero">
+      <div class="module-hero__inner">
+        <div>
+          <a class="module-hero__brand" href="../../index.html">Normal Rooms</a>
+          <p class="module-hero__tag">Blog module</p>
+          <h1 class="module-hero__title">Sequences organized by time</h1>
+          <p class="module-hero__lead">
+            The Normal Rooms blog is a sequence of pages organized by time. It captures updates, release notes, and
+            announcements as they unfold.
+          </p>
+        </div>
+        <div class="module-hero__cta">
+          <p class="module-timestamp" id="blog-latest-note" aria-live="polite">Tracking the most recent post…</p>
+        </div>
       </div>
     </header>
 
-    <main class="blog-shell">
-      <section class="blog-list" aria-label="Recent posts">
-        <ul id="blog-post-list"></ul>
+    <main class="module-shell module-shell--two-column">
+      <section class="blog-list module-section" aria-label="Recent posts">
+        <h2 class="module-section__title">Latest posts</h2>
+        <p class="module-section__subtitle">Chronological stream of work, decisions, and release notes.</p>
+        <ul id="blog-post-list" class="module-stack"></ul>
       </section>
-      <aside class="blog-sidebar" aria-label="Blog navigation">
+      <aside class="module-sidebar" aria-label="Blog navigation">
         <section>
           <h2>Archives</h2>
           <ul id="blog-archives"></ul>
         </section>
         <section>
-          <h2>Wiki</h2>
+          <h2>Other modules</h2>
           <p>
-            Looking for evergreen documentation? Visit the <a href="../wiki/index.html">wiki module</a> for reference
-            articles and cross-links into the rest of the site.
+            Looking for evergreen documentation? Visit the <a href="../wiki/index.html">wiki module</a> or dive into the
+            <a href="../projects/index.html">projects module</a> for domain-focused sequences.
           </p>
         </section>
       </aside>
     </main>
 
     <footer class="blog-footer">
-      <p>Content from <code>content/blog</code>. Subscribe via RSS (coming soon).</p>
+      <div class="blog-footer__inner">
+        <p>Content from <code>content/blog</code>. Subscribe via RSS (coming soon).</p>
+      </div>
     </footer>
 
     <script src="../../assets/js/site.js"></script>

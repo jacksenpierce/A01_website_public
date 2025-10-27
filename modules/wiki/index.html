@@ -11,32 +11,39 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../../assets/css/base.css" />
+    <link rel="stylesheet" href="../../assets/css/modules.css" />
     <link rel="stylesheet" href="../../assets/css/wiki.css" />
   </head>
   <body class="skin-wiki" data-wiki-article="normal-rooms">
-    <header class="site-banner">
-      <div class="banner-inner">
-        <a class="wordmark" href="../../index.html">
-          <span class="wordmark__title">Normal Rooms</span>
-          <span class="wordmark__subtitle">Knowledge base</span>
-        </a>
-        <form class="wiki-search" action="../../search.html">
-          <label class="sr-only" for="wiki-search-input">Search the site</label>
+    <header class="module-hero">
+      <div class="module-hero__inner">
+        <div>
+          <a class="module-hero__brand" href="../../index.html">Normal Rooms</a>
+          <p class="module-hero__tag">Wiki module</p>
+          <h1 class="module-hero__title">Documentation configured by relation</h1>
+          <p class="module-hero__lead">
+            The Normal Rooms wiki is a configuration of pages organized by relation. It foregrounds how topics connect,
+            letting you traverse the knowledge graph by association instead of chronology.
+          </p>
+        </div>
+        <form class="module-search" action="../../search.html">
+          <label for="wiki-search-input">Search the knowledge base</label>
           <input id="wiki-search-input" type="search" name="q" placeholder="Search Normal Rooms" />
         </form>
       </div>
     </header>
 
-    <div class="wiki-shell">
-      <aside class="wiki-sidebar" aria-label="Site navigation">
-        <nav>
-          <h2>Navigation</h2>
-          <ul>
-            <li><a href="index.html" aria-current="page">Main page</a></li>
+    <main class="module-shell">
+      <div class="wiki-shell">
+        <aside class="wiki-sidebar" aria-label="Site navigation">
+          <nav>
+            <h2>Navigation</h2>
+            <ul>
+              <li><a href="index.html" aria-current="page">Main page</a></li>
             <li><a href="article.html?doc=architecture-overview">Architecture overview</a></li>
             <li><a href="article.html?doc=publishing-checklist">Publishing checklist</a></li>
             <li><a href="../blog/index.html">Blog</a></li>
-            <li><a href="../../projects.html">Projects</a></li>
+            <li><a href="../projects/index.html">Projects</a></li>
             <li><a href="../../tags.html">Tags</a></li>
           </ul>
         </nav>
@@ -69,14 +76,17 @@
           <nav id="wiki-toc"></nav>
         </div>
       </aside>
-    </div>
+      </div>
+    </main>
 
     <footer class="wiki-footer">
-      <p>Content from <code>content/wiki</code>. Last updated <span id="wiki-updated">—</span>.</p>
-      <p>
-        Looking for updates? Visit the <a href="../blog/index.html">blog module</a> or search the full site from the
-        header.
-      </p>
+      <div class="wiki-footer__inner">
+        <p>Content from <code>content/wiki</code>. Last updated <span id="wiki-updated">—</span>.</p>
+        <p>
+          Looking for updates? Visit the <a href="../blog/index.html">blog module</a> or explore the
+          <a href="../projects/index.html">projects module</a> for domain-focused sequences.
+        </p>
+      </div>
     </footer>
 
     <script src="../../assets/js/site.js"></script>
