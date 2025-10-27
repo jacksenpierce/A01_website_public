@@ -1,20 +1,20 @@
 {
   "articles": [
     {
-      "id": "normal-rooms",
-      "title": "Normal Rooms",
-      "subtitle": "Static-first knowledge base",
-      "summary": "Overview of the Normal Rooms documentation stack and navigation patterns.",
-      "contentPath": "content/wiki/normal-rooms.html",
-      "updated": "2024-05-24"
-    },
-    {
       "id": "architecture-overview",
       "title": "Architecture overview",
       "subtitle": "Technical reference",
       "summary": "How the static modules, assets, and content directories compose the site.",
       "contentPath": "content/wiki/architecture-overview.html",
       "updated": "2024-05-20"
+    },
+    {
+      "id": "normal-rooms",
+      "title": "Normal Rooms",
+      "subtitle": "Static-first knowledge base",
+      "summary": "Overview of the Normal Rooms documentation stack and navigation patterns.",
+      "contentPath": "content/wiki/normal-rooms.html",
+      "updated": "2024-05-24"
     },
     {
       "id": "publishing-checklist",

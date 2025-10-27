@@ -1,92 +1,119 @@
 [
   {
-    "title": "Foundations",
-    "description": "Core principles behind the Normal Rooms static site.",
-    "url": "modules/wiki/index.html#foundations",
-    "tags": ["wiki", "architecture", "workflow"]
-  },
-  {
-    "title": "Architecture",
-    "description": "How the Docusaurus-inspired structure keeps content consistent.",
-    "url": "modules/wiki/index.html#architecture",
-    "tags": ["wiki", "static", "projects"]
-  },
-  {
-    "title": "Publishing workflow",
-    "description": "Single-source Markdown pipeline with static search indexing.",
-    "url": "modules/wiki/index.html#publishing",
-    "tags": ["wiki", "build", "quality"]
-  },
-  {
-    "title": "Governance",
-    "description": "Tag management and process alignment for Normal Rooms.",
-    "url": "modules/wiki/index.html#governance",
-    "tags": ["wiki", "governance", "process"]
+    "title": "Aligning static workflows with research cadence",
+    "description": "Synchronizing lab entries with wiki and project updates.",
+    "url": "modules/blog/post.html?slug=aligning-static-workflows",
+    "tags": [
+      "blog",
+      "workflow",
+      "lab"
+    ]
   },
   {
     "title": "Architecture overview",
     "description": "How modules, content, and assets compose the static knowledge base.",
     "url": "modules/wiki/article.html?doc=architecture-overview",
-    "tags": ["wiki", "architecture", "reference"]
-  },
-  {
-    "title": "Publishing checklist",
-    "description": "Step-by-step guide for preparing documentation releases.",
-    "url": "modules/wiki/article.html?doc=publishing-checklist",
-    "tags": ["wiki", "workflow", "quality"]
-  },
-  {
-    "title": "Aligning static workflows with research cadence",
-    "description": "Synchronizing lab entries with wiki and project updates.",
-    "url": "modules/blog/post.html?slug=aligning-static-workflows",
-    "tags": ["blog", "workflow", "lab"]
-  },
-  {
-    "title": "Publishing the first unified lab index",
-    "description": "Launching the lab notebook index and static search payload.",
-    "url": "modules/blog/post.html?slug=lab-index-release",
-    "tags": ["blog", "lab", "quality"]
-  },
-  {
-    "title": "Welcome to Normal Rooms",
-    "description": "Introducing the knowledge hub and gated landing page.",
-    "url": "modules/blog/post.html?slug=welcome",
-    "tags": ["blog", "announcement"]
-  },
-  {
-    "title": "NR-LAB-006 · Delta observation window stress test",
-    "description": "Stress testing the delta visualization during rapid rebuilds.",
-    "url": "lab/delta-observation-window.html",
-    "tags": ["lab", "performance"]
-  },
-  {
-    "title": "Project log · Static pipeline hardening (NR-LAB-005)",
-    "description": "Benchmarking latency for the static search index as part of the infrastructure sequence.",
-    "url": "modules/projects/project.html?slug=static-pipeline-hardening",
-    "tags": ["project", "search", "quality"]
-  },
-  {
-    "title": "Project log · Landing gate usability (NR-LAB-004)",
-    "description": "Testing the clarity and tone of the entry experience within the experience domain.",
-    "url": "modules/projects/project.html?slug=landing-experience-refresh",
-    "tags": ["project", "ux", "workflow"]
-  },
-  {
-    "title": "Static pipeline hardening",
-    "description": "Project hub connecting build improvements across idioms.",
-    "url": "modules/projects/project.html?slug=static-pipeline-hardening",
-    "tags": ["project", "build", "quality"]
+    "tags": [
+      "wiki",
+      "architecture",
+      "reference"
+    ]
   },
   {
     "title": "Knowledge graph curation",
     "description": "Taxonomy stewardship for tags, projects, and experiments.",
     "url": "modules/projects/project.html?slug=knowledge-graph-curation",
-    "tags": ["project", "governance", "workflow"]
+    "tags": [
+      "project",
+      "governance",
+      "workflow"
+    ]
   },
   {
     "title": "Landing experience refresh",
     "description": "Maintaining the gray-and-orange gate experience.",
     "url": "modules/projects/project.html?slug=landing-experience-refresh",
-    "tags": ["project", "ux", "announcement"]
+    "tags": [
+      "project",
+      "ux",
+      "workflow"
+    ]
+  },
+  {
+    "title": "Normal Rooms",
+    "description": "Overview of the Normal Rooms documentation stack and navigation patterns.",
+    "url": "modules/wiki/article.html?doc=normal-rooms",
+    "tags": [
+      "wiki",
+      "architecture",
+      "workflow"
+    ]
+  },
+  {
+    "title": "NR-LAB-004 · Landing gate usability study",
+    "description": "Testing the clarity and tone of the landing gate experience.",
+    "url": "lab/landing-gate-usability.html",
+    "tags": [
+      "lab",
+      "ux",
+      "workflow"
+    ]
+  },
+  {
+    "title": "NR-LAB-005 · Client-side search prototype benchmark",
+    "description": "Benchmarking latency for the static search prototype.",
+    "url": "lab/search-prototype-benchmark.html",
+    "tags": [
+      "lab",
+      "search"
+    ]
+  },
+  {
+    "title": "NR-LAB-006 · Delta observation window stress test",
+    "description": "Stress testing the delta visualization during rapid rebuilds.",
+    "url": "lab/delta-observation-window.html",
+    "tags": [
+      "lab",
+      "performance"
+    ]
+  },
+  {
+    "title": "Publishing checklist",
+    "description": "Step-by-step guide for preparing documentation releases.",
+    "url": "modules/wiki/article.html?doc=publishing-checklist",
+    "tags": [
+      "wiki",
+      "workflow",
+      "quality"
+    ]
+  },
+  {
+    "title": "Publishing the first unified lab index",
+    "description": "Launching the lab notebook index and static search payload.",
+    "url": "modules/blog/post.html?slug=lab-index-release",
+    "tags": [
+      "blog",
+      "lab",
+      "quality"
+    ]
+  },
+  {
+    "title": "Static pipeline hardening",
+    "description": "Project hub connecting build improvements across idioms.",
+    "url": "modules/projects/project.html?slug=static-pipeline-hardening",
+    "tags": [
+      "project",
+      "build",
+      "quality"
+    ]
+  },
+  {
+    "title": "Welcome to Normal Rooms",
+    "description": "Introducing the Normal Rooms knowledge hub and its documentation idioms.",
+    "url": "modules/blog/post.html?slug=welcome",
+    "tags": [
+      "blog",
+      "announcement"
+    ]
   }
 ]

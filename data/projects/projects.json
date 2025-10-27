@@ -21,12 +21,27 @@
       "sequence": 1,
       "summary": "Fortify the static build pipeline with reproducible checks so every deploy ships with fresh search data and validated links.",
       "updated": "2024-05-24",
-      "tags": ["build", "quality"],
+      "tags": [
+        "build",
+        "quality"
+      ],
       "contentPath": "content/projects/static-pipeline-hardening.html",
       "spotlight": [
-        {"label": "Wiki", "title": "Publishing checklist", "url": "../wiki/article.html?doc=publishing-checklist"},
-        {"label": "Blog", "title": "Aligning static workflows", "url": "../blog/post.html?slug=aligning-static-workflows"},
-        {"label": "Log", "title": "NR-LAB-005 search benchmark", "url": "../../lab/search-prototype-benchmark.html"}
+        {
+          "label": "Wiki",
+          "title": "Publishing checklist",
+          "url": "../wiki/article.html?doc=publishing-checklist"
+        },
+        {
+          "label": "Blog",
+          "title": "Aligning static workflows",
+          "url": "../blog/post.html?slug=aligning-static-workflows"
+        },
+        {
+          "label": "Log",
+          "title": "NR-LAB-005 search benchmark",
+          "url": "../../lab/search-prototype-benchmark.html"
+        }
       ]
     },
     {
@@ -36,12 +51,27 @@
       "sequence": 1,
       "summary": "Establish a sustainable taxonomy for wiki topics, experiment IDs, and project identifiers to keep cross-linking accurate.",
       "updated": "2024-05-20",
-      "tags": ["governance", "workflow"],
+      "tags": [
+        "governance",
+        "workflow"
+      ],
       "contentPath": "content/projects/knowledge-graph-curation.html",
       "spotlight": [
-        {"label": "Wiki", "title": "Architecture overview", "url": "../wiki/article.html?doc=architecture-overview"},
-        {"label": "Blog", "title": "Welcome to Normal Rooms", "url": "../blog/post.html?slug=welcome"},
-        {"label": "Log", "title": "NR-LAB-004 landing gate study", "url": "../../lab/landing-gate-usability.html"}
+        {
+          "label": "Wiki",
+          "title": "Architecture overview",
+          "url": "../wiki/article.html?doc=architecture-overview"
+        },
+        {
+          "label": "Blog",
+          "title": "Welcome to Normal Rooms",
+          "url": "../blog/post.html?slug=welcome"
+        },
+        {
+          "label": "Log",
+          "title": "NR-LAB-004 landing gate study",
+          "url": "../../lab/landing-gate-usability.html"
+        }
       ]
     },
     {
@@ -51,12 +81,27 @@
       "sequence": 1,
       "summary": "Maintain a calm gray-and-orange entry point that sets the tone while keeping access frictionless across devices.",
       "updated": "2024-04-29",
-      "tags": ["ux", "workflow"],
+      "tags": [
+        "ux",
+        "workflow"
+      ],
       "contentPath": "content/projects/landing-experience-refresh.html",
       "spotlight": [
-        {"label": "Wiki", "title": "Normal Rooms overview", "url": "../wiki/article.html?doc=normal-rooms"},
-        {"label": "Blog", "title": "Lab index release", "url": "../blog/post.html?slug=lab-index-release"},
-        {"label": "Log", "title": "NR-LAB-004 landing gate study", "url": "../../lab/landing-gate-usability.html"}
+        {
+          "label": "Wiki",
+          "title": "Normal Rooms overview",
+          "url": "../wiki/article.html?doc=normal-rooms"
+        },
+        {
+          "label": "Blog",
+          "title": "Lab index release",
+          "url": "../blog/post.html?slug=lab-index-release"
+        },
+        {
+          "label": "Log",
+          "title": "NR-LAB-004 landing gate study",
+          "url": "../../lab/landing-gate-usability.html"
+        }
       ]
     }
   ]
