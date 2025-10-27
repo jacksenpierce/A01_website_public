@@ -28,10 +28,11 @@ body.skin-wiki h3 {
 .wiki-sidebar {
   display: grid;
   gap: 1rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius);
   padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  box-shadow: var(--shadow-soft);
 }
 
 .wiki-sidebar h2 {
@@ -58,11 +59,11 @@ body.skin-wiki h3 {
 .wiki-main {
   display: grid;
   gap: clamp(1.5rem, 3vw, 2rem);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius);
   padding: clamp(2rem, 4vw, 3rem);
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-soft);
 }
 
 .wiki-tabs {
@@ -71,7 +72,7 @@ body.skin-wiki h3 {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border-subtle);
   padding-bottom: 0.75rem;
 }
 
@@ -90,12 +91,12 @@ body.skin-wiki h3 {
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
   font-size: 0.85rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-muted);
   color: var(--text-muted);
 }
 
 .wiki-tabs .active {
-  background: rgba(255, 119, 63, 0.2);
+  background: var(--accent-soft);
   color: var(--accent);
   font-weight: 600;
 }
@@ -113,7 +114,7 @@ body.skin-wiki h3 {
   font-size: clamp(1.4rem, 3vw, 1.85rem);
   margin-top: clamp(1.75rem, 3vw, 2.5rem);
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .wiki-article h3 {
@@ -135,7 +136,7 @@ body.skin-wiki h3 {
 }
 
 .wiki-related {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border-subtle);
   padding-top: 1.5rem;
   display: grid;
   gap: 1rem;
@@ -164,8 +165,8 @@ body.skin-wiki h3 {
 }
 
 .wiki-toc {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius);
   padding: clamp(1.25rem, 2.5vw, 1.75rem);
   position: sticky;
@@ -173,6 +174,7 @@ body.skin-wiki h3 {
   display: grid;
   gap: 1rem;
   height: fit-content;
+  box-shadow: var(--shadow-soft);
 }
 
 .wiki-toc h2 {
@@ -205,7 +207,7 @@ body.skin-wiki h3 {
 .wiki-footer__inner {
   max-width: var(--module-max-width);
   margin: 0 auto;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border-subtle);
   padding-top: 1.5rem;
   color: var(--text-muted);
   display: grid;
