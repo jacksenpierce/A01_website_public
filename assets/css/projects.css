@@ -1,12 +1,3 @@
-body.skin-projects a {
-  color: var(--accent);
-}
-
-body.skin-projects a:hover,
-body.skin-projects a:focus {
-  color: #ffa47a;
-}
-
 #projects-stack > .module-stack__domain {
   background: var(--surface);
   border: 1px solid var(--border-subtle);

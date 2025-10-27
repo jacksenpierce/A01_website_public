@@ -1,12 +1,3 @@
-body.skin-blog a {
-  color: var(--accent);
-}
-
-body.skin-blog a:hover,
-body.skin-blog a:focus {
-  color: #ffa47a;
-}
-
 .blog-list ul {
   list-style: none;
   padding: 0;

@@ -7,7 +7,10 @@
       "type": "Update",
       "summary": "We consolidated the publishing workflow with the lab schedule so new findings reach every surface.",
       "contentPath": "content/blog/aligning-static-workflows.html",
-      "tags": ["workflow", "lab"]
+      "tags": [
+        "workflow",
+        "lab"
+      ]
     },
     {
       "slug": "lab-index-release",
@@ -16,7 +19,10 @@
       "type": "Release",
       "summary": "The lab index ships with static search data and cross-links for experiment traceability.",
       "contentPath": "content/blog/lab-index-release.html",
-      "tags": ["lab", "quality"]
+      "tags": [
+        "lab",
+        "quality"
+      ]
     },
     {
       "slug": "welcome",
@@ -25,7 +31,9 @@
       "type": "Announcement",
       "summary": "Introducing the Normal Rooms knowledge hub and its documentation idioms.",
       "contentPath": "content/blog/welcome.html",
-      "tags": ["announcement"]
+      "tags": [
+        "announcement"
+      ]
     }
   ]
 }
