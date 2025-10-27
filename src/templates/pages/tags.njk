@@ -1,0 +1,32 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<main class="tags">
+  <div class="container">
+    <header class="page-header">
+      <p class="eyebrow">Vocabulary</p>
+      <h1>Tags</h1>
+      <p>A shared language applied across wiki, blog, lab, and project content.</p>
+    </header>
+
+    <section class="tags__cloud" aria-label="All tags">
+      {% for tag in tags.items %}
+      <a class="tag" href="#tag-{{ tag.id }}">{{ tag.label }}</a>
+      {% endfor %}
+    </section>
+
+    <section class="tags__groups" aria-label="Tag details">
+      {% for tag in tags.items %}
+      <article class="tag-group" id="tag-{{ tag.id }}">
+        <h2>{{ tag.label }}</h2>
+        <ul class="list">
+          {% for item in tag.items %}
+          <li><a href="{{ item.href }}">{{ item.title }}</a> · {{ item.type }}</li>
+          {% endfor %}
+        </ul>
+      </article>
+      {% endfor %}
+    </section>
+  </div>
+</main>
+{% endblock %}

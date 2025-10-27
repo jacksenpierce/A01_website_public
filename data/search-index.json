@@ -3,78 +3,128 @@
     "title": "Foundations",
     "description": "Core principles behind the Normal Rooms static site.",
     "url": "wiki.html#foundations",
-    "tags": ["wiki", "architecture", "workflow"]
+    "tags": [
+      "wiki",
+      "architecture",
+      "workflow"
+    ]
   },
   {
     "title": "Architecture",
     "description": "How the Docusaurus-inspired structure keeps content consistent.",
     "url": "wiki.html#architecture",
-    "tags": ["wiki", "static", "projects"]
+    "tags": [
+      "wiki",
+      "static",
+      "projects"
+    ]
   },
   {
     "title": "Publishing workflow",
     "description": "Single-source Markdown pipeline with static search indexing.",
     "url": "wiki.html#publishing",
-    "tags": ["wiki", "build", "quality"]
+    "tags": [
+      "wiki",
+      "build",
+      "quality"
+    ]
   },
   {
     "title": "Governance",
     "description": "Tag management and process alignment for Normal Rooms.",
     "url": "wiki.html#governance",
-    "tags": ["wiki", "governance", "process"]
+    "tags": [
+      "wiki",
+      "governance",
+      "process"
+    ]
   },
   {
     "title": "Aligning static workflows with research cadence",
-    "description": "Synchronizing lab entries with wiki and project updates.",
+    "description": "Synchronizing lab entries with project hubs to keep documentation aligned.",
     "url": "blog/aligning-static-workflows.html",
-    "tags": ["blog", "workflow", "lab"]
+    "tags": [
+      "blog",
+      "workflow",
+      "lab"
+    ]
   },
   {
     "title": "Publishing the first unified lab index",
     "description": "Launching the lab notebook index and static search payload.",
     "url": "blog/lab-index-release.html",
-    "tags": ["blog", "lab", "quality"]
+    "tags": [
+      "blog",
+      "lab",
+      "quality"
+    ]
   },
   {
     "title": "Welcome to Normal Rooms",
     "description": "Introducing the knowledge hub and gated landing page.",
     "url": "blog/welcome.html",
-    "tags": ["blog", "announcement"]
+    "tags": [
+      "blog",
+      "announcement"
+    ]
   },
   {
     "title": "NR-LAB-006 · Delta observation window stress test",
     "description": "Stress testing the delta visualization during rapid rebuilds.",
     "url": "lab/delta-observation-window.html",
-    "tags": ["lab", "performance"]
+    "tags": [
+      "lab",
+      "performance"
+    ]
   },
   {
     "title": "NR-LAB-005 · Client-side search prototype benchmark",
     "description": "Benchmarking latency for the static search index.",
     "url": "lab/search-prototype-benchmark.html",
-    "tags": ["lab", "search", "quality"]
+    "tags": [
+      "lab",
+      "search",
+      "quality"
+    ]
   },
   {
     "title": "NR-LAB-004 · Landing gate usability scan",
-    "description": "Testing the clarity and tone of the new landing gate.",
+    "description": "Testing the clarity and tone of the landing gate.",
     "url": "lab/landing-gate-usability.html",
-    "tags": ["lab", "ux", "workflow"]
-  },
-  {
-    "title": "Static pipeline hardening",
-    "description": "Project hub connecting build improvements across idioms.",
-    "url": "projects.html#project-static-pipeline",
-    "tags": ["project", "build", "quality"]
+    "tags": [
+      "lab",
+      "ux",
+      "workflow"
+    ]
   },
   {
     "title": "Knowledge graph curation",
-    "description": "Taxonomy stewardship for tags, projects, and experiments.",
+    "description": "Establish a sustainable taxonomy for wiki topics, experiment IDs, and project identifiers to keep cross-linking accurate.",
     "url": "projects.html#project-knowledge-graph",
-    "tags": ["project", "governance", "workflow"]
+    "tags": [
+      "project",
+      "governance",
+      "workflow"
+    ]
   },
   {
     "title": "Landing experience refresh",
-    "description": "Maintaining the gray-and-orange gate experience.",
+    "description": "Maintain a calm gray-and-orange gate that sets the tone for the knowledge base while keeping access frictionless.",
     "url": "projects.html#project-landing-experience",
-    "tags": ["project", "ux", "announcement"]
+    "tags": [
+      "project",
+      "ux",
+      "announcement"
+    ]
+  },
+  {
+    "title": "Static pipeline hardening",
+    "description": "Fortify the static build pipeline with reproducible checks, ensuring every deploy includes search index updates and link validation.",
+    "url": "projects.html#project-static-pipeline",
+    "tags": [
+      "project",
+      "build",
+      "quality"
+    ]
   }
 ]

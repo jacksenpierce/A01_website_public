@@ -1,0 +1,35 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<main class="page">
+  <article class="container">
+    <header class="lab-detail__header">
+      <p class="lab-detail__meta">{{ entry.meta }}</p>
+      <h1>{{ entry.title }}</h1>
+      {% if entry.tags.length %}
+      <p class="post__tags">
+        Tags:
+        {% for tag in entry.tags %}
+          <a class="tag" href="{{ tag.href }}">{{ tag.label }}</a>{% if not loop.last %},{% endif %}
+        {% endfor %}
+      </p>
+      {% endif %}
+    </header>
+    <dl class="lab-entry__details">
+      {% for field in entry.fields %}
+      <div>
+        <dt>{{ field.label }}</dt>
+        <dd>{{ field.value }}</dd>
+      </div>
+      {% endfor %}
+    </dl>
+    {% if entry.related.length %}
+    <footer class="lab-detail__footer">
+      {% for item in entry.related %}
+      <p>{{ item.label }}: <a href="{{ item.href }}">{{ item.text }}</a></p>
+      {% endfor %}
+    </footer>
+    {% endif %}
+  </article>
+</main>
+{% endblock %}

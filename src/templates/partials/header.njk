@@ -1,0 +1,24 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="{{ page.basePath }}home.html">
+      <span class="brand-mark" aria-hidden="true">NR</span>
+      <span class="brand-text">Normal Rooms</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+    <nav id="primary-navigation" class="site-nav" data-open="false">
+      <ul>
+        <li><a{% if page.nav == 'wiki' %} aria-current="page"{% endif %} href="{{ page.basePath }}wiki.html">Wiki</a></li>
+        <li><a{% if page.nav == 'blog' %} aria-current="page"{% endif %} href="{{ page.basePath }}blog.html">Blog</a></li>
+        <li><a{% if page.nav == 'lab' %} aria-current="page"{% endif %} href="{{ page.basePath }}lab.html">Lab Notebook</a></li>
+        <li><a{% if page.nav == 'projects' %} aria-current="page"{% endif %} href="{{ page.basePath }}projects.html">Projects</a></li>
+        <li><a{% if page.nav == 'tags' %} aria-current="page"{% endif %} href="{{ page.basePath }}tags.html">Tags</a></li>
+        <li><a{% if page.nav == 'search' %} aria-current="page"{% endif %} href="{{ page.basePath }}search.html">Search</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>

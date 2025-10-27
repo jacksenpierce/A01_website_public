@@ -1,0 +1,17 @@
+<footer class="site-footer">
+  <div class="container footer__inner">
+    <div>
+      <span class="brand-mark" aria-hidden="true">NR</span>
+      <p>Static-first publishing for Normal Rooms.</p>
+    </div>
+    <nav aria-label="Footer links">
+      <ul class="footer__links">
+        <li><a{% if page.nav == 'about' %} aria-current="page"{% endif %} href="{{ page.basePath }}about.html">About</a></li>
+        <li><a{% if page.nav == 'contact' %} aria-current="page"{% endif %} href="{{ page.basePath }}contact.html">Contact</a></li>
+        <li><a{% if page.nav == 'donate' %} aria-current="page"{% endif %} href="{{ page.basePath }}donate.html">Support</a></li>
+        <li><a{% if page.nav == 'legal' %} aria-current="page"{% endif %} href="{{ page.basePath }}legal.html">Legal</a></li>
+      </ul>
+    </nav>
+    <p class="footer__meta">© <span id="year"></span> Normal Rooms. All static, all the time.</p>
+  </div>
+</footer>

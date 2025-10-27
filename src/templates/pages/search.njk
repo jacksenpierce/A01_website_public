@@ -1,0 +1,22 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<main class="search">
+  <div class="container">
+    <header class="page-header">
+      <p class="eyebrow">Static index</p>
+      <h1>Search</h1>
+      <p>Client-side search that queries a prebuilt JSON index generated at build time.</p>
+    </header>
+
+    <form class="search__form" role="search">
+      <label class="search__label" for="search-query">Search the wiki, blog, and lab notebook</label>
+      <input id="search-query" type="search" name="q" placeholder="Try 'search prototype'" autocomplete="off" />
+    </form>
+
+    <section class="search__results" id="search-results" aria-live="polite">
+      <p class="search__empty">Start typing to see matching pages.</p>
+    </section>
+  </div>
+</main>
+{% endblock %}

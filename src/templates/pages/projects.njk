@@ -1,0 +1,64 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<main class="projects">
+  <div class="container">
+    <header class="page-header">
+      <p class="eyebrow">Hubs</p>
+      <h1>Projects</h1>
+      <p>Stable project hubs summarizing goals and linking to related work across the site.</p>
+    </header>
+
+    <section class="grid grid--three">
+      {% for project in projects.items %}
+      <article class="card card--project" id="{{ project.id }}">
+        <h2>{{ project.title }}</h2>
+        <p>{{ project.summary }}</p>
+        <dl class="card__meta">
+          {% if project.links.wiki.length %}
+          <div>
+            <dt>Related wiki</dt>
+            <dd>
+              {% for link in project.links.wiki %}
+                <a href="{{ link.href }}">{{ link.label }}</a>{% if not loop.last %}, {% endif %}
+              {% endfor %}
+            </dd>
+          </div>
+          {% endif %}
+          {% if project.links.blog.length %}
+          <div>
+            <dt>Blog posts</dt>
+            <dd>
+              {% for link in project.links.blog %}
+                <a href="{{ link.href }}">{{ link.label }}</a>{% if not loop.last %}, {% endif %}
+              {% endfor %}
+            </dd>
+          </div>
+          {% endif %}
+          {% if project.links.lab.length %}
+          <div>
+            <dt>Lab entries</dt>
+            <dd>
+              {% for link in project.links.lab %}
+                <a href="{{ link.href }}">{{ link.label }}</a>{% if not loop.last %}, {% endif %}
+              {% endfor %}
+            </dd>
+          </div>
+          {% endif %}
+          {% if project.tags.length %}
+          <div>
+            <dt>Tags</dt>
+            <dd>
+              {% for tag in project.tags %}
+                <a class="tag" href="{{ tag.href }}">{{ tag.label }}</a>{% if not loop.last %} {% endif %}
+              {% endfor %}
+            </dd>
+          </div>
+          {% endif %}
+        </dl>
+      </article>
+      {% endfor %}
+    </section>
+  </div>
+</main>
+{% endblock %}

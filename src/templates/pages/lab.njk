@@ -1,0 +1,39 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<main class="lab">
+  <div class="container">
+    <header class="page-header">
+      <p class="eyebrow">Experiments</p>
+      <h1>Lab Notebook</h1>
+      <p>Structured, append-only experiment entries that surface across the wiki and blog.</p>
+    </header>
+
+    <section class="lab__entries" aria-label="Lab entries">
+      {% for entry in lab.entries %}
+      <article class="lab-entry">
+        <header class="lab-entry__header">
+          <div>
+            <h2><a href="{{ entry.href }}">{{ entry.heading }}</a></h2>
+            <p class="lab-entry__meta">Status: {{ entry.status }}{% if entry.tags.length %} · Tags:
+              {% for tag in entry.tags %}
+                <a class="tag" href="{{ tag.href }}">{{ tag.label }}</a>{% if not loop.last %},{% endif %}
+              {% endfor %}
+            {% endif %}</p>
+          </div>
+          <span class="lab-entry__date">Logged {{ entry.logged }}</span>
+        </header>
+        <dl class="lab-entry__details">
+          {% for field in entry.fields %}
+          <div>
+            <dt>{{ field.label }}</dt>
+            <dd>{{ field.value }}</dd>
+          </div>
+          {% endfor %}
+        </dl>
+      </article>
+      {% endfor %}
+    </section>
+  </div>
+</main>
+{% endblock %}

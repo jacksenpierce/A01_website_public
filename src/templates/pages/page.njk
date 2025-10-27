@@ -1,0 +1,25 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<main class="page">
+  <div class="container">
+    <header class="page-header">
+      {% if page.eyebrow %}<p class="eyebrow">{{ page.eyebrow }}</p>{% endif %}
+      <h1>{{ page.heading }}</h1>
+      {% if page.description %}<p>{{ page.description }}</p>{% endif %}
+    </header>
+    <div class="page__content">
+      {% if pageContent.sections.length %}
+        {% for section in pageContent.sections %}
+          <section>
+            <h2>{{ section.title }}</h2>
+            {{ section.body | safe }}
+          </section>
+        {% endfor %}
+      {% else %}
+        {{ pageContent.body | safe }}
+      {% endif %}
+    </div>
+  </div>
+</main>
+{% endblock %}

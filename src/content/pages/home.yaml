@@ -1,0 +1,20 @@
+hero:
+  eyebrow: Static, calm, durable
+  title: One source of truth for Normal Rooms.
+  description: >-
+    Every artifact on this site is generated ahead of time. Browse evergreen reference material,
+    catch up on chronological updates, or audit experiment notes—all from the same Markdown-first
+    substrate.
+  primaryCta:
+    label: Explore the Wiki
+    href: wiki.html
+  secondaryCta:
+    label: Read the Blog
+    href: blog.html
+intro:
+  eyebrow: Multi-idiom publishing
+  title: Three ways to engage with the work.
+  description: >-
+    Content is authored once and surfaced where it matters. Tags and cross-links keep the wiki, blog,
+    and lab notebook synchronized without duplication.
+

@@ -1,0 +1,83 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<main>
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__copy">
+        <p class="eyebrow">{{ home.hero.eyebrow }}</p>
+        <h1>{{ home.hero.title }}</h1>
+        <p>{{ home.hero.description }}</p>
+        <div class="hero__actions">
+          <a class="button" href="{{ home.hero.primaryCta.href }}">{{ home.hero.primaryCta.label }}</a>
+          <a class="button button--ghost" href="{{ home.hero.secondaryCta.href }}">{{ home.hero.secondaryCta.label }}</a>
+        </div>
+      </div>
+      <div class="hero__panel" aria-hidden="true">
+        <ul class="hero__stats">
+          {% for stat in home.stats %}
+          <li>
+            <span class="hero__stat-label">{{ stat.label }}</span>
+            <span class="hero__stat-value">{{ stat.value }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container section__inner">
+      <header class="section-header">
+        <p class="eyebrow">{{ home.intro.eyebrow }}</p>
+        <h2>{{ home.intro.title }}</h2>
+        <p>{{ home.intro.description }}</p>
+      </header>
+      <div class="grid grid--three">
+        {% for idiom in home.idioms %}
+        <article class="card">
+          <h3>{{ idiom.title }}</h3>
+          <p>{{ idiom.description }}</p>
+          <a class="card__link" href="{{ idiom.href }}">{{ idiom.linkLabel }}</a>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container section__inner">
+      <header class="section-header">
+        <p class="eyebrow">Stay oriented</p>
+        <h2>Recent highlights</h2>
+      </header>
+      <div class="grid grid--two">
+        <article class="card card--list">
+          <h3>Latest blog posts</h3>
+          <ul class="list">
+            {% for post in home.latestBlog %}
+            <li>
+              <span class="list__meta">{{ post.meta }}</span>
+              <a href="{{ post.href }}">{{ post.title }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+          <a class="card__link" href="blog.html">View all posts</a>
+        </article>
+        <article class="card card--list">
+          <h3>Latest lab entries</h3>
+          <ul class="list">
+            {% for entry in home.latestLab %}
+            <li>
+              <span class="list__meta">{{ entry.meta }}</span>
+              <a href="{{ entry.href }}">{{ entry.title }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+          <a class="card__link" href="lab.html">View all experiments</a>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

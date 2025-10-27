@@ -1,0 +1,30 @@
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<main class="post">
+  <article class="container">
+    <header class="post__header">
+      <p class="post__meta">{{ post.meta }}</p>
+      <h1>{{ post.title }}</h1>
+      {% if post.tags.length %}
+      <p class="post__tags">
+        Tags:
+        {% for tag in post.tags %}
+          <a class="tag" href="{{ tag.href }}">{{ tag.label }}</a>{% if not loop.last %},{% endif %}
+        {% endfor %}
+      </p>
+      {% endif %}
+    </header>
+    <div class="post__content">
+      {{ post.content | safe }}
+    </div>
+    {% if post.related.length %}
+    <footer class="post__footer">
+      {% for item in post.related %}
+        <p>{{ item.label }}: <a href="{{ item.href }}">{{ item.text }}</a></p>
+      {% endfor %}
+    </footer>
+    {% endif %}
+  </article>
+</main>
+{% endblock %}

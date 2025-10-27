@@ -14,152 +14,160 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="home.html">
-        <span class="brand-mark" aria-hidden="true">NR</span>
-        <span class="brand-text">Normal Rooms</span>
-      </a>
-      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="nav-toggle-bar"></span>
-        <span class="nav-toggle-bar"></span>
-        <span class="nav-toggle-bar"></span>
-      </button>
-      <nav id="primary-navigation" class="site-nav" data-open="false">
-        <ul>
-          <li><a href="wiki.html">Wiki</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li><a href="lab.html">Lab Notebook</a></li>
-          <li><a href="projects.html">Projects</a></li>
-          <li><a href="tags.html">Tags</a></li>
-          <li><a href="search.html">Search</a></li>
+  <div class="container header-inner">
+    <a class="brand" href="home.html">
+      <span class="brand-mark" aria-hidden="true">NR</span>
+      <span class="brand-text">Normal Rooms</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+    <nav id="primary-navigation" class="site-nav" data-open="false">
+      <ul>
+        <li><a href="wiki.html">Wiki</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="lab.html">Lab Notebook</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="tags.html">Tags</a></li>
+        <li><a href="search.html">Search</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+  
+<main>
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__copy">
+        <p class="eyebrow">Static, calm, durable</p>
+        <h1>One source of truth for Normal Rooms.</h1>
+        <p>Every artifact on this site is generated ahead of time. Browse evergreen reference material, catch up on chronological updates, or audit experiment notes—all from the same Markdown-first substrate.</p>
+        <div class="hero__actions">
+          <a class="button" href="wiki.html">Explore the Wiki</a>
+          <a class="button button--ghost" href="blog.html">Read the Blog</a>
+        </div>
+      </div>
+      <div class="hero__panel" aria-hidden="true">
+        <ul class="hero__stats">
+          
+          <li>
+            <span class="hero__stat-label">Evergreen Articles</span>
+            <span class="hero__stat-value">4</span>
+          </li>
+          
+          <li>
+            <span class="hero__stat-label">Project Hubs</span>
+            <span class="hero__stat-value">3</span>
+          </li>
+          
+          <li>
+            <span class="hero__stat-label">Lab Experiments</span>
+            <span class="hero__stat-value">3</span>
+          </li>
+          
         </ul>
-      </nav>
+      </div>
     </div>
-  </header>
+  </section>
 
-  <main>
-    <section class="hero">
-      <div class="container hero__inner">
-        <div class="hero__copy">
-          <p class="eyebrow">Static, calm, durable</p>
-          <h1>One source of truth for Normal Rooms.</h1>
-          <p>
-            Every artifact on this site is generated ahead of time. Browse evergreen reference
-            material, catch up on chronological updates, or audit experiment notes—all from the same
-            Markdown-first substrate.
-          </p>
-          <div class="hero__actions">
-            <a class="button" href="wiki.html">Explore the Wiki</a>
-            <a class="button button--ghost" href="blog.html">Read the Blog</a>
-          </div>
-        </div>
-        <div class="hero__panel" aria-hidden="true">
-          <ul class="hero__stats">
+  <section class="section section--alt">
+    <div class="container section__inner">
+      <header class="section-header">
+        <p class="eyebrow">Multi-idiom publishing</p>
+        <h2>Three ways to engage with the work.</h2>
+        <p>Content is authored once and surfaced where it matters. Tags and cross-links keep the wiki, blog, and lab notebook synchronized without duplication.</p>
+      </header>
+      <div class="grid grid--three">
+        
+        <article class="card">
+          <h3>Wiki</h3>
+          <p>Evergreen reference pages with contextual navigation and deep linking.</p>
+          <a class="card__link" href="wiki.html">Browse articles</a>
+        </article>
+        
+        <article class="card">
+          <h3>Blog</h3>
+          <p>Chronological updates with archives and tags for historical context.</p>
+          <a class="card__link" href="blog.html">Read updates</a>
+        </article>
+        
+        <article class="card">
+          <h3>Lab notebook</h3>
+          <p>Structured experiment entries that capture aim, method, and follow-up.</p>
+          <a class="card__link" href="lab.html">Review experiments</a>
+        </article>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container section__inner">
+      <header class="section-header">
+        <p class="eyebrow">Stay oriented</p>
+        <h2>Recent highlights</h2>
+      </header>
+      <div class="grid grid--two">
+        <article class="card card--list">
+          <h3>Latest blog posts</h3>
+          <ul class="list">
+            
             <li>
-              <span class="hero__stat-label">Evergreen Articles</span>
-              <span class="hero__stat-value">12</span>
+              <span class="list__meta">May 24, 2024 · Update</span>
+              <a href="blog/aligning-static-workflows.html">Aligning static workflows with research cadence</a>
             </li>
+            
             <li>
-              <span class="hero__stat-label">Project Hubs</span>
-              <span class="hero__stat-value">3</span>
+              <span class="list__meta">May 10, 2024 · Release</span>
+              <a href="blog/lab-index-release.html">Publishing the first unified lab index</a>
             </li>
-            <li>
-              <span class="hero__stat-label">Lab Experiments</span>
-              <span class="hero__stat-value">6</span>
-            </li>
+            
           </ul>
-        </div>
+          <a class="card__link" href="blog.html">View all posts</a>
+        </article>
+        <article class="card card--list">
+          <h3>Latest lab entries</h3>
+          <ul class="list">
+            
+            <li>
+              <span class="list__meta">Experiment · NR-LAB-006</span>
+              <a href="lab/delta-observation-window.html">Delta observation window stress test</a>
+            </li>
+            
+            <li>
+              <span class="list__meta">Experiment · NR-LAB-005</span>
+              <a href="lab/search-prototype-benchmark.html">Client-side search prototype benchmark</a>
+            </li>
+            
+          </ul>
+          <a class="card__link" href="lab.html">View all experiments</a>
+        </article>
       </div>
-    </section>
-
-    <section class="section section--alt">
-      <div class="container section__inner">
-        <header class="section-header">
-          <p class="eyebrow">Multi-idiom publishing</p>
-          <h2>Three ways to engage with the work.</h2>
-          <p>
-            Content is authored once and surfaced where it matters. Tags and cross-links keep the
-            wiki, blog, and lab notebook synchronized without duplication.
-          </p>
-        </header>
-        <div class="grid grid--three">
-          <article class="card">
-            <h3>Wiki</h3>
-            <p>Evergreen reference pages with contextual navigation and deep linking.</p>
-            <a class="card__link" href="wiki.html">Browse articles</a>
-          </article>
-          <article class="card">
-            <h3>Blog</h3>
-            <p>Chronological updates with archives and tags for historical context.</p>
-            <a class="card__link" href="blog.html">Read updates</a>
-          </article>
-          <article class="card">
-            <h3>Lab notebook</h3>
-            <p>Structured experiment entries that capture aim, method, and follow-up.</p>
-            <a class="card__link" href="lab.html">Review experiments</a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container section__inner">
-        <header class="section-header">
-          <p class="eyebrow">Stay oriented</p>
-          <h2>Recent highlights</h2>
-        </header>
-        <div class="grid grid--two">
-          <article class="card card--list">
-            <h3>Latest blog posts</h3>
-            <ul class="list">
-              <li>
-                <span class="list__meta">May 24, 2024 · Update</span>
-                <a href="blog/aligning-static-workflows.html">Aligning static workflows with research cadence</a>
-              </li>
-              <li>
-                <span class="list__meta">May 10, 2024 · Release</span>
-                <a href="blog/lab-index-release.html">Publishing the first unified lab index</a>
-              </li>
-            </ul>
-            <a class="card__link" href="blog.html">View all posts</a>
-          </article>
-          <article class="card card--list">
-            <h3>Latest lab entries</h3>
-            <ul class="list">
-              <li>
-                <span class="list__meta">Experiment · NR-LAB-006</span>
-                <a href="lab/delta-observation-window.html">Delta observation window stress test</a>
-              </li>
-              <li>
-                <span class="list__meta">Experiment · NR-LAB-005</span>
-                <a href="lab/search-prototype-benchmark.html">Client-side search prototype benchmark</a>
-              </li>
-            </ul>
-            <a class="card__link" href="lab.html">View all experiments</a>
-          </article>
-        </div>
-      </div>
-    </section>
-  </main>
+    </div>
+  </section>
+</main>
 
   <footer class="site-footer">
-    <div class="container footer__inner">
-      <div>
-        <span class="brand-mark" aria-hidden="true">NR</span>
-        <p>Static-first publishing for Normal Rooms.</p>
-      </div>
-      <nav aria-label="Footer links">
-        <ul class="footer__links">
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="donate.html">Support</a></li>
-          <li><a href="legal.html">Legal</a></li>
-        </ul>
-      </nav>
-      <p class="footer__meta">© <span id="year"></span> Normal Rooms. All static, all the time.</p>
+  <div class="container footer__inner">
+    <div>
+      <span class="brand-mark" aria-hidden="true">NR</span>
+      <p>Static-first publishing for Normal Rooms.</p>
     </div>
-  </footer>
+    <nav aria-label="Footer links">
+      <ul class="footer__links">
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="donate.html">Support</a></li>
+        <li><a href="legal.html">Legal</a></li>
+      </ul>
+    </nav>
+    <p class="footer__meta">© <span id="year"></span> Normal Rooms. All static, all the time.</p>
+  </div>
+</footer>
 
   <script src="script.js"></script>
 </body>
