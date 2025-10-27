@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { projectRoot } from './helpers/dom.js';
 
-const indexPath = path.join(projectRoot, 'data', 'search-index.json');
+const indexPath = path.join(projectRoot, 'data', 'search', 'index.json');
 
 test('search index is a non-empty array with required fields', async () => {
   const raw = await readFile(indexPath, 'utf8');

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Normal Rooms · Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/base.css" />
+    <link rel="stylesheet" href="../../assets/css/blog.css" />
+  </head>
+  <body class="skin-blog">
+    <header class="blog-hero">
+      <div class="blog-hero__inner">
+        <a class="brand" href="../../index.html">Normal Rooms</a>
+        <h1>Blog</h1>
+        <p class="blog-hero__lead">Updates, release notes, and announcements from the Normal Rooms team.</p>
+      </div>
+    </header>
+
+    <main class="blog-shell">
+      <section class="blog-list" aria-label="Recent posts">
+        <ul id="blog-post-list"></ul>
+      </section>
+      <aside class="blog-sidebar" aria-label="Blog navigation">
+        <section>
+          <h2>Archives</h2>
+          <ul id="blog-archives"></ul>
+        </section>
+        <section>
+          <h2>Wiki</h2>
+          <p>
+            Looking for evergreen documentation? Visit the <a href="../wiki/index.html">wiki module</a> for reference
+            articles and cross-links into the rest of the site.
+          </p>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="blog-footer">
+      <p>Content from <code>content/blog</code>. Subscribe via RSS (coming soon).</p>
+    </footer>
+
+    <script src="../../assets/js/site.js"></script>
+    <script src="../../assets/js/blog.js" type="module"></script>
+  </body>
+</html>

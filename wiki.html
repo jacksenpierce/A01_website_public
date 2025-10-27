@@ -1,153 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Normal Rooms · Wiki</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="home.html">
-        <span class="brand-mark" aria-hidden="true">NR</span>
-        <span class="brand-text">Normal Rooms</span>
-      </a>
-      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="nav-toggle-bar"></span>
-        <span class="nav-toggle-bar"></span>
-        <span class="nav-toggle-bar"></span>
-      </button>
-      <nav id="primary-navigation" class="site-nav" data-open="false">
-        <ul>
-          <li><a aria-current="page" href="wiki.html">Wiki</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li><a href="lab.html">Lab Notebook</a></li>
-          <li><a href="projects.html">Projects</a></li>
-          <li><a href="tags.html">Tags</a></li>
-          <li><a href="search.html">Search</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <main class="wiki">
-    <div class="container wiki__layout">
-      <aside class="wiki__sidebar" aria-label="Article navigation">
-        <h2 class="wiki__sidebar-title">Contents</h2>
-        <nav>
-          <ul>
-            <li><a href="#foundations">Foundations</a></li>
-            <li><a href="#architecture">Architecture</a></li>
-            <li><a href="#publishing">Publishing workflow</a></li>
-            <li><a href="#governance">Governance</a></li>
-          </ul>
-        </nav>
-      </aside>
-
-      <article class="wiki__content">
-        <header class="page-header">
-          <p class="eyebrow">Reference</p>
-          <h1>Wiki</h1>
-          <p>Evergreen, interlinked documentation for the Normal Rooms project.</p>
-        </header>
-
-        <section id="foundations" class="wiki__section">
-          <h2>Foundations</h2>
-          <p>
-            Normal Rooms is a static-first initiative that favors predictable deployments, human
-            readable URLs, and a single Markdown/MDX substrate. All content is rendered during the
-            build, ensuring the site remains fast on GitHub Pages without runtime dependencies.
-          </p>
-          <ul class="tag-list">
-            <li><a class="tag" href="tags.html#architecture">architecture</a></li>
-            <li><a class="tag" href="tags.html#workflow">workflow</a></li>
-          </ul>
-        </section>
-
-        <section id="architecture" class="wiki__section">
-          <h2>Architecture</h2>
-          <p>
-            The stack centers on Docusaurus conventions: docs, blog, and custom pages map to our
-            wiki, blog, and lab notebook idioms. Components are kept light to guarantee readability
-            without JavaScript. Navigation chrome is shared across all pages for consistency.
-          </p>
-          <p>
-            Projects are represented by dedicated MDX files that aggregate links via tags. Each
-            document may appear in multiple idioms by reference, avoiding duplicated truths while
-            supporting multi-entry navigation.
-          </p>
-          <ul class="tag-list">
-            <li><a class="tag" href="tags.html#static">static</a></li>
-            <li><a class="tag" href="tags.html#projects">projects</a></li>
-          </ul>
-        </section>
-
-        <section id="publishing" class="wiki__section">
-          <h2>Publishing workflow</h2>
-          <p>
-            Content authors work in a single repository folder structure mirroring Docusaurus docs,
-            blog posts, lab entries, and project hubs. Each file includes light front matter for
-            title, description, and tags. A build script generates the static site, local search
-            index, and integrity checks before deployment.
-          </p>
-          <p>
-            Because the build emits all pages, indexes, and search data, the public site serves only
-            static files. GitHub Pages hosts the result for free, and link stability checks catch
-            regressions before publishing.
-          </p>
-          <ul class="tag-list">
-            <li><a class="tag" href="tags.html#build">build</a></li>
-            <li><a class="tag" href="tags.html#quality">quality</a></li>
-          </ul>
-        </section>
-
-        <section id="governance" class="wiki__section">
-          <h2>Governance</h2>
-          <p>
-            A small shared vocabulary of tags keeps the site navigable. Project leads maintain the
-            taxonomy, review incoming documents, and ensure every change includes updated cross
-            references. Release notes appear on the blog, while decisions that affect policy land in
-            the wiki for permanent reference.
-          </p>
-          <p>
-            The lab notebook remains append-only to preserve experiment history. Projects link to
-            relevant lab entries and posts via tags, building a durable knowledge graph.
-          </p>
-          <ul class="tag-list">
-            <li><a class="tag" href="tags.html#governance">governance</a></li>
-            <li><a class="tag" href="tags.html#process">process</a></li>
-          </ul>
-        </section>
-      </article>
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer__inner">
-      <div>
-        <span class="brand-mark" aria-hidden="true">NR</span>
-        <p>Static-first publishing for Normal Rooms.</p>
-      </div>
-      <nav aria-label="Footer links">
-        <ul class="footer__links">
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="donate.html">Support</a></li>
-          <li><a href="legal.html">Legal</a></li>
-        </ul>
-      </nav>
-      <p class="footer__meta">© <span id="year"></span> Normal Rooms. All static, all the time.</p>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0; url=modules/wiki/index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Normal Rooms · Wiki</title>
+    <link rel="stylesheet" href="assets/css/base.css" />
+  </head>
+  <body>
+    <p>
+      Redirecting to the new <a href="modules/wiki/index.html">Normal Rooms wiki module</a>. If you are not redirected,
+      use the link to continue.
+    </p>
+    <script src="assets/js/site.js"></script>
+  </body>
 </html>

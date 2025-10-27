@@ -71,8 +71,9 @@ test('internal links resolve to existing files', async () => {
         continue;
       }
 
-      const [relativePath, hash] = href.split('#');
-      const targetPath = normalizePath(file, relativePath);
+      const [relativeWithQuery, hash] = href.split('#');
+      const [relativePath] = relativeWithQuery.split('?');
+      const targetPath = relativePath ? normalizePath(file, relativePath) : file;
 
       try {
         await access(targetPath, fsConstants.F_OK);

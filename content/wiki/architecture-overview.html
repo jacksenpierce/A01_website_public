@@ -1,0 +1,27 @@
+<header class="wiki-article__header">
+  <h1>Architecture overview</h1>
+  <p class="wiki-article__meta">Scope: Technical reference · Status: Stable</p>
+</header>
+  <section id="static-build">
+    <h2>Static build system</h2>
+    <p>
+      The site is compiled from modular content sources. Wiki articles and blog posts live under the <code>content</code>
+      directory, while UI shells reside in <code>modules</code>. A lightweight build (or manual copy) assembles those pieces
+      into deployable static pages.
+    </p>
+  </section>
+  <section id="asset-pipeline">
+    <h2>Asset pipeline</h2>
+    <p>
+      Shared CSS and JavaScript live in <code>assets</code>. Module-specific styles layer on top of the base skin. The
+      structure keeps the repository predictable and mirrors the separation between content and presentation.
+    </p>
+  </section>
+  <section id="linking">
+    <h2>Linking patterns</h2>
+    <p>
+      Articles use standard anchor links and section IDs so that the wiki script can auto-generate table-of-contents
+      navigation. Cross-module links (for example, pointing to the blog) use relative URLs and slug identifiers defined in
+      metadata files.
+    </p>
+  </section>

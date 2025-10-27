@@ -2,43 +2,55 @@
   {
     "title": "Foundations",
     "description": "Core principles behind the Normal Rooms static site.",
-    "url": "wiki.html#foundations",
+    "url": "modules/wiki/index.html#foundations",
     "tags": ["wiki", "architecture", "workflow"]
   },
   {
     "title": "Architecture",
     "description": "How the Docusaurus-inspired structure keeps content consistent.",
-    "url": "wiki.html#architecture",
+    "url": "modules/wiki/index.html#architecture",
     "tags": ["wiki", "static", "projects"]
   },
   {
     "title": "Publishing workflow",
     "description": "Single-source Markdown pipeline with static search indexing.",
-    "url": "wiki.html#publishing",
+    "url": "modules/wiki/index.html#publishing",
     "tags": ["wiki", "build", "quality"]
   },
   {
     "title": "Governance",
     "description": "Tag management and process alignment for Normal Rooms.",
-    "url": "wiki.html#governance",
+    "url": "modules/wiki/index.html#governance",
     "tags": ["wiki", "governance", "process"]
+  },
+  {
+    "title": "Architecture overview",
+    "description": "How modules, content, and assets compose the static knowledge base.",
+    "url": "modules/wiki/article.html?doc=architecture-overview",
+    "tags": ["wiki", "architecture", "reference"]
+  },
+  {
+    "title": "Publishing checklist",
+    "description": "Step-by-step guide for preparing documentation releases.",
+    "url": "modules/wiki/article.html?doc=publishing-checklist",
+    "tags": ["wiki", "workflow", "quality"]
   },
   {
     "title": "Aligning static workflows with research cadence",
     "description": "Synchronizing lab entries with wiki and project updates.",
-    "url": "blog/aligning-static-workflows.html",
+    "url": "modules/blog/post.html?slug=aligning-static-workflows",
     "tags": ["blog", "workflow", "lab"]
   },
   {
     "title": "Publishing the first unified lab index",
     "description": "Launching the lab notebook index and static search payload.",
-    "url": "blog/lab-index-release.html",
+    "url": "modules/blog/post.html?slug=lab-index-release",
     "tags": ["blog", "lab", "quality"]
   },
   {
     "title": "Welcome to Normal Rooms",
     "description": "Introducing the knowledge hub and gated landing page.",
-    "url": "blog/welcome.html",
+    "url": "modules/blog/post.html?slug=welcome",
     "tags": ["blog", "announcement"]
   },
   {

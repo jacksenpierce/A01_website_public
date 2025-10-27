@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Normal Rooms · Wiki article</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Linux+Libertine:wght@400;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../assets/css/base.css" />
+    <link rel="stylesheet" href="../../assets/css/wiki.css" />
+  </head>
+  <body class="skin-wiki">
+    <header class="site-banner">
+      <div class="banner-inner">
+        <a class="wordmark" href="../../index.html">
+          <span class="wordmark__title">Normal Rooms</span>
+          <span class="wordmark__subtitle">Knowledge base</span>
+        </a>
+        <form class="wiki-search" action="../../search.html">
+          <label class="sr-only" for="wiki-search-input">Search the site</label>
+          <input id="wiki-search-input" type="search" name="q" placeholder="Search Normal Rooms" />
+        </form>
+      </div>
+    </header>
+
+    <div class="wiki-shell">
+      <aside class="wiki-sidebar" aria-label="Site navigation">
+        <nav>
+          <h2>Navigation</h2>
+          <ul>
+            <li><a href="index.html">Main page</a></li>
+            <li><a href="article.html?doc=architecture-overview">Architecture overview</a></li>
+            <li><a href="article.html?doc=publishing-checklist">Publishing checklist</a></li>
+            <li><a href="../blog/index.html">Blog</a></li>
+            <li><a href="../../projects.html">Projects</a></li>
+            <li><a href="../../tags.html">Tags</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="wiki-main" aria-label="Wiki article">
+        <div class="wiki-tabs" role="navigation" aria-label="Page actions">
+          <ul>
+            <li><span class="active">Article</span></li>
+            <li><span class="disabled">Talk</span></li>
+          </ul>
+          <ul>
+            <li><span class="disabled">Read</span></li>
+            <li><span class="disabled">View source</span></li>
+            <li><span class="disabled">History</span></li>
+          </ul>
+        </div>
+
+        <article id="wiki-article" class="wiki-article" aria-live="polite"></article>
+
+        <section class="wiki-related" aria-label="Related articles">
+          <h2>Related articles</h2>
+          <ul id="wiki-related-list"></ul>
+        </section>
+      </main>
+
+      <aside class="wiki-toc" aria-label="Table of contents">
+        <div class="wiki-toc__inner">
+          <h2>Contents</h2>
+          <nav id="wiki-toc"></nav>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="wiki-footer">
+      <p>Content from <code>content/wiki</code>. Last updated <span id="wiki-updated">—</span>.</p>
+    </footer>
+
+    <script src="../../assets/js/site.js"></script>
+    <script src="../../assets/js/wiki.js" type="module"></script>
+  </body>
+</html>
