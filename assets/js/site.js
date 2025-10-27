@@ -14,30 +14,43 @@ if (yearSpan) {
   yearSpan.textContent = new Date().getFullYear();
 }
 
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener('click', (event) => {
-    const targetId = anchor.getAttribute('href').slice(1);
-    const target = document.getElementById(targetId);
+document.addEventListener('click', (event) => {
+  const anchor = event.target.closest('a[href^="#"]');
+  if (!anchor) {
+    return;
+  }
 
-    if (target) {
-      event.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth' });
-      if (navigation) {
-        navigation.setAttribute('data-open', 'false');
-        navToggle?.setAttribute('aria-expanded', 'false');
-      }
+  const href = anchor.getAttribute('href');
+  if (!href || href === '#') {
+    return;
+  }
+
+  const targetId = href.slice(1);
+  const target = document.getElementById(targetId);
+
+  if (target) {
+    event.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth' });
+    if (navigation) {
+      navigation.setAttribute('data-open', 'false');
+      navToggle?.setAttribute('aria-expanded', 'false');
     }
-  });
+  }
 });
 
 function resolveAssetPath(asset) {
-  const script = document.querySelector('script[src*="script.js"]');
+  const script = document.currentScript || document.querySelector('script[src*="site.js"]');
   if (!script) return asset;
   const src = script.getAttribute('src');
   if (!src) return asset;
-  const base = src.replace(/script\.js.*/, '');
-  return `${base}${asset}`;
+  const scriptUrl = new URL(src, window.location.href);
+  const rootPath = scriptUrl.pathname.replace(/assets\/js\/site\.js.*$/, '');
+  const origin = scriptUrl.origin;
+  const normalizedAsset = asset.startsWith('/') ? asset.slice(1) : asset;
+  return `${origin}${rootPath}${normalizedAsset}`;
 }
+
+window.resolveAssetPath = resolveAssetPath;
 
 async function setupSearch() {
   const searchInput = document.querySelector('#search-query');
@@ -49,7 +62,7 @@ async function setupSearch() {
 
   let index = [];
   try {
-    const response = await fetch(resolveAssetPath('data/search-index.json'));
+    const response = await fetch(resolveAssetPath('data/search/index.json'));
     if (!response.ok) throw new Error('Failed to load search index');
     index = await response.json();
   } catch (error) {

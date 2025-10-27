@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 export const projectRoot = path.resolve(__dirname, '..', '..');
-const scriptPath = path.join(projectRoot, 'script.js');
+const scriptPath = path.join(projectRoot, 'assets', 'js', 'site.js');
 
 const defaultFetch = async () => ({
   ok: true,

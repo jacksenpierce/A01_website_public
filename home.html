@@ -10,7 +10,7 @@
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
 </head>
 <body>
   <header class="site-header">
@@ -27,8 +27,8 @@
       </button>
       <nav id="primary-navigation" class="site-nav" data-open="false">
         <ul>
-          <li><a href="wiki.html">Wiki</a></li>
-          <li><a href="blog.html">Blog</a></li>
+          <li><a href="modules/wiki/index.html">Wiki</a></li>
+          <li><a href="modules/blog/index.html">Blog</a></li>
           <li><a href="lab.html">Lab Notebook</a></li>
           <li><a href="projects.html">Projects</a></li>
           <li><a href="tags.html">Tags</a></li>
@@ -70,12 +70,12 @@
           <article class="card">
             <h3>Wiki</h3>
             <p>Living reference notes—concepts I'm refining, ideas I return to, foundations.</p>
-            <a class="card__link" href="wiki.html">Browse the notes</a>
+            <a class="card__link" href="modules/wiki/index.html">Browse the notes</a>
           </article>
           <article class="card">
             <h3>Blog</h3>
             <p>Letters from the workbench documenting progress, detours, and release energy.</p>
-            <a class="card__link" href="blog.html">Read the posts</a>
+            <a class="card__link" href="modules/blog/index.html">Read the posts</a>
           </article>
           <article class="card">
             <h3>Lab notebook</h3>
@@ -98,14 +98,14 @@
             <ul class="list">
               <li>
                 <span class="list__meta">May 24, 2024 · Update</span>
-                <a href="blog/aligning-static-workflows.html">Aligning static workflows with research cadence</a>
+                <a href="modules/blog/post.html?slug=aligning-static-workflows">Aligning static workflows with research cadence</a>
               </li>
               <li>
                 <span class="list__meta">May 10, 2024 · Release</span>
-                <a href="blog/lab-index-release.html">Publishing the first unified lab index</a>
+                <a href="modules/blog/post.html?slug=lab-index-release">Publishing the first unified lab index</a>
               </li>
             </ul>
-            <a class="card__link" href="blog.html">View the archive</a>
+            <a class="card__link" href="modules/blog/index.html">View the archive</a>
           </article>
           <article class="card card--list">
             <h3>Latest lab entries</h3>
@@ -144,6 +144,6 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="assets/js/site.js"></script>
 </body>
 </html>

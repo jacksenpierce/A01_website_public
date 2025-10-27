@@ -368,104 +368,10 @@ ul {
   flex-wrap: wrap;
 }
 
-/* Wiki */
-
-.wiki {
-  padding: 5rem 0;
-}
-
-.wiki__layout {
-  display: grid;
-  grid-template-columns: minmax(220px, 260px) 1fr;
-  gap: 3rem;
-}
-
-.wiki__sidebar {
-  position: sticky;
-  top: 120px;
-  align-self: start;
-  padding: 0 0 0 1.5rem;
-  border-left: 1px solid rgba(246, 247, 249, 0.08);
-}
-
-.wiki__sidebar-title {
-  margin-top: 0;
-}
-
-.wiki__sidebar ul {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.wiki__content {
-  display: grid;
-  gap: 3rem;
-}
-
-.wiki__section {
-  padding: 0 0 2.5rem;
-  border-bottom: 1px solid rgba(246, 247, 249, 0.08);
-}
+/* Page header */
 
 .page-header {
   margin-bottom: 2rem;
-}
-
-/* Blog */
-
-.blog {
-  padding: 4rem 0 5rem;
-}
-
-.blog__list {
-  display: grid;
-  gap: 2.5rem;
-}
-
-.post-card {
-  padding: 0 0 2.5rem;
-  display: grid;
-  gap: 1rem;
-  border-bottom: 1px solid rgba(246, 247, 249, 0.08);
-}
-
-.post-card__meta {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-
-.archives {
-  margin-top: 4rem;
-}
-
-/* Post detail */
-
-.post {
-  padding: 4rem 0 5rem;
-}
-
-.post__header {
-  margin-bottom: 2rem;
-}
-
-.post__meta {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-.post__tags {
-  color: var(--text-muted);
-}
-
-.post__content {
-  padding: 0;
-  display: grid;
-  gap: 1.5rem;
-}
-
-.post__footer {
-  margin-top: 2rem;
-  color: var(--text-muted);
 }
 
 /* Lab */
