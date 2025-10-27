@@ -8,8 +8,8 @@ body.skin-projects a:focus {
 }
 
 #projects-stack > .module-stack__domain {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius);
   padding: clamp(1.5rem, 3vw, 2rem);
 }
@@ -66,7 +66,7 @@ body.skin-projects a:focus {
 .project-card__spotlight {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .project-card__spotlight p {
@@ -114,7 +114,7 @@ body.skin-projects a:focus {
 .projects-footer__inner {
   max-width: var(--module-max-width);
   margin: 0 auto;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--border-subtle);
   padding-top: 1.5rem;
   font-size: 0.9rem;
   color: var(--text-muted);
