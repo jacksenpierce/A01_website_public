@@ -1,25 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Normal Rooms</title>
-  <link rel="stylesheet" href="assets/css/base.css" />
-</head>
-<body class="landing">
-  <main class="landing__wrap" aria-labelledby="site-title">
-    <div class="landing__frame">
-      <span class="landing__tag">Normal Rooms</span>
-      <h1 id="site-title">An independent studio for quiet experiments in code, sound, and writing.</h1>
-      <p class="landing__copy">
-        This is my personal atlas—projects, lab notes, and essays rendered statically so they feel
-        calm, intentional, and ready for long-term reference.
-      </p>
-      <div class="landing__actions">
-        <a class="button landing__cta" href="home.html">Enter the studio</a>
-        <a class="button button--ghost" href="about.html">About the author</a>
-      </div>
-    </div>
-  </main>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Signal Links</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Barlow", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: #0d0d0d;
+        color: #ff7518;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      main {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #graph {
+        position: relative;
+        width: min(900px, 90vw);
+        height: min(900px, 90vh);
+      }
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .link {
+        stroke: #ff7518;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        opacity: 0.55;
+        filter: url(#soft-glow);
+      }
+
+      .node circle {
+        fill: #ff7518;
+        opacity: 0.88;
+        filter: url(#soft-glow);
+        animation: pulse 5.6s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+        cursor: grab;
+      }
+
+      .node circle:active {
+        cursor: grabbing;
+      }
+
+      .node text {
+        fill: #ff7518;
+        font-size: 0.95rem;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        text-anchor: middle;
+        pointer-events: none;
+        filter: blur(0.3px);
+      }
+
+      .node a {
+        text-decoration: none;
+        pointer-events: all;
+      }
+
+      .node a text {
+        pointer-events: none;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.82;
+        }
+        50% {
+          transform: scale(1.12);
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .node text {
+          font-size: 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div id="graph" role="img" aria-label="Interactive network of social links"></div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" integrity="sha512-2zJrped1IovnHgwlHGawEq+y3OCAXoTr4Wr9PXgCulvRlQCxwBEm90LkAMPx/+qvOB0fOkH1ZZ1xd6Q671O5jQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      const svgSize = () => ({
+        width: document.body.clientWidth,
+        height: document.body.clientHeight,
+      });
+
+      const graphContainer = document.getElementById("graph");
+      const { width: initialWidth, height: initialHeight } = svgSize();
+
+      const svg = d3
+        .select(graphContainer)
+        .append("svg")
+        .attr("viewBox", `0 0 ${initialWidth} ${initialHeight}`)
+        .attr("preserveAspectRatio", "xMidYMid meet");
+
+      const defs = svg.append("defs");
+      const glow = defs
+        .append("filter")
+        .attr("id", "soft-glow")
+        .attr("x", "-50%")
+        .attr("y", "-50%")
+        .attr("width", "200%")
+        .attr("height", "200%");
+
+      glow.append("feGaussianBlur").attr("stdDeviation", 3).attr("result", "coloredBlur");
+      const feMerge = glow.append("feMerge");
+      feMerge.append("feMergeNode").attr("in", "coloredBlur");
+      feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+      const nodes = [
+        { id: "hub", label: "", link: null, fixed: true },
+        { id: "tiktok", label: "TikTok", link: "https://www.tiktok.com/" },
+        { id: "instagram", label: "Instagram", link: "https://www.instagram.com/" },
+        { id: "patreon", label: "Patreon", link: "https://www.patreon.com/" },
+        { id: "facebook", label: "Facebook", link: "https://www.facebook.com/" },
+        { id: "github", label: "GitHub", link: "https://github.com/" },
+      ];
+
+      const links = nodes
+        .filter((node) => node.id !== "hub")
+        .map((node) => ({ source: "hub", target: node.id }));
+
+      const simulation = d3
+        .forceSimulation(nodes)
+        .force(
+          "link",
+          d3
+            .forceLink(links)
+            .id((d) => d.id)
+            .strength(0.4)
+            .distance(() => Math.min(initialWidth, initialHeight) / 3.4)
+        )
+        .force("charge", d3.forceManyBody().strength(-360))
+        .force("center", d3.forceCenter(initialWidth / 2, initialHeight / 2))
+        .force(
+          "collision",
+          d3.forceCollide().radius((d) => (d.id === "hub" ? 80 : 55)).strength(0.9)
+        );
+
+      const link = svg
+        .append("g")
+        .attr("stroke", null)
+        .selectAll("line")
+        .data(links)
+        .join("line")
+        .attr("class", "link");
+
+      const node = svg
+        .append("g")
+        .selectAll("g")
+        .data(nodes)
+        .join("g")
+        .attr("class", "node")
+        .call(
+          d3
+            .drag()
+            .on("start", (event, d) => {
+              if (!event.active) simulation.alphaTarget(0.2).restart();
+              d.fx = d.x;
+              d.fy = d.y;
+            })
+            .on("drag", (event, d) => {
+              d.fx = event.x;
+              d.fy = event.y;
+            })
+            .on("end", (event, d) => {
+              if (!event.active) simulation.alphaTarget(0);
+              d.fx = null;
+              d.fy = null;
+            })
+        );
+
+      node
+        .append("circle")
+        .attr("r", (d) => (d.id === "hub" ? 22 : 16));
+
+      node
+        .filter((d) => d.link)
+        .append("a")
+        .attr("xlink:href", (d) => d.link)
+        .attr("target", "_blank")
+        .attr("rel", "noopener noreferrer")
+        .append("text")
+        .attr("dy", -28)
+        .text((d) => d.label);
+
+      const updatePositions = () => {
+        link
+          .attr("x1", (d) => d.source.x)
+          .attr("y1", (d) => d.source.y)
+          .attr("x2", (d) => d.target.x)
+          .attr("y2", (d) => d.target.y);
+
+        node.attr("transform", (d) => `translate(${d.x},${d.y})`);
+      };
+
+      simulation.on("tick", updatePositions);
+
+      const resize = () => {
+        const { width, height } = svgSize();
+        svg.attr("viewBox", `0 0 ${width} ${height}`);
+        simulation
+          .force("center", d3.forceCenter(width / 2, height / 2))
+          .force(
+            "link",
+            d3
+              .forceLink(links)
+              .id((d) => d.id)
+              .strength(0.4)
+              .distance(() => Math.min(width, height) / 3.4)
+          )
+          .alpha(0.6)
+          .restart();
+      };
+
+      window.addEventListener("resize", resize);
+
+      // Gentle idle motion to keep the network alive.
+      const breathe = () => {
+        simulation.alpha(0.12).restart();
+        setTimeout(breathe, 4800);
+      };
+
+      breathe();
+    </script>
+  </body>
 </html>
