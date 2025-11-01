@@ -1,0 +1,18 @@
+# Edit this file to control the hub-and-spoke links on the landing page.
+# - "display" controls the text shown on each node.
+# - "href" (or "visit") controls the URL opened when the node is clicked.
+hub:
+  label: "Signal Links"
+  display: "Signal Links"
+  href: null
+spokes:
+  - display: "Instagram"
+    href: "https://instagram.com"
+  - display: "Facebook"
+    href: "https://facebook.com"
+  - display: "Patreon"
+    href: "https://patreon.com"
+  - display: "TikTok"
+    href: "https://tiktok.com"
+  - display: "GitHub"
+    href: "https://github.com"
