@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "title": "Signal Links"
+  },
+  "nodes": [
+    {
+      "id": "signal",
+      "label": "Signal Links",
+      "href": null,
+      "color": "#CC5500",
+      "radius": 26,
+      "shape": "circle"
+    },
+    {
+      "id": "instagram",
+      "label": "Instagram",
+      "href": "https://instagram.com/",
+      "color": "#CC5500"
+    },
+    {
+      "id": "facebook",
+      "label": "Facebook",
+      "href": "https://facebook.com/",
+      "color": "#CC5500"
+    },
+    {
+      "id": "patreon",
+      "label": "Patreon",
+      "href": "https://patreon.com/",
+      "color": "#CC5500"
+    },
+    {
+      "id": "tiktok",
+      "label": "TikTok",
+      "href": "https://tiktok.com/",
+      "color": "#CC5500"
+    },
+    {
+      "id": "github",
+      "label": "GitHub",
+      "href": "https://github.com/",
+      "color": "#CC5500"
+    }
+  ],
+  "links": [
+    { "source": "signal", "target": "instagram" },
+    { "source": "signal", "target": "facebook" },
+    { "source": "signal", "target": "patreon" },
+    { "source": "signal", "target": "tiktok" },
+    { "source": "signal", "target": "github" }
+  ]
+}
