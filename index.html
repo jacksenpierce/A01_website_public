@@ -39,50 +39,196 @@
   <body>
     <div id="root"></div>
     <script type="module">
-      import React, { useEffect, useRef } from "https://esm.sh/react@18.2.0";
+      import React, { useEffect, useRef, useState } from "https://esm.sh/react@18.2.0";
       import { createRoot } from "https://esm.sh/react-dom@18.2.0/client";
       import * as d3 from "https://esm.sh/d3@7.9.0?bundle";
+      import { load as loadYaml } from "https://esm.sh/js-yaml@4.1.0";
 
       const BURNT_ORANGE = "#CC5500";
       const BG_COLOR = "#0b0b0c";
       const LINK_COLOR = "rgba(255,255,255,0.18)";
+      const CONFIG_URL = "graph-config.yaml";
 
-      const DATA = {
-        nodes: [
-          { id: "hub", url: null, type: "hub" },
-          { id: "Instagram", url: "https://instagram.com", type: "spoke" },
-          { id: "Facebook", url: "https://facebook.com", type: "spoke" },
-          { id: "Patreon", url: "https://patreon.com", type: "spoke" },
-          { id: "TikTok", url: "https://tiktok.com", type: "spoke" },
-          { id: "GitHub", url: "https://github.com", type: "spoke" }
-        ],
-        links: [
-          { source: "hub", target: "Instagram" },
-          { source: "hub", target: "Facebook" },
-          { source: "hub", target: "Patreon" },
-          { source: "hub", target: "TikTok" },
-          { source: "hub", target: "GitHub" }
+      const FALLBACK_CONFIG = {
+        hub: { label: "Signal Links", display: "Signal Links", href: null },
+        spokes: [
+          { display: "Instagram", href: "https://instagram.com" },
+          { display: "Facebook", href: "https://facebook.com" },
+          { display: "Patreon", href: "https://patreon.com" },
+          { display: "TikTok", href: "https://tiktok.com" },
+          { display: "GitHub", href: "https://github.com" }
         ]
       };
+
+      const FALLBACK_GRAPH = buildGraphFromConfig(FALLBACK_CONFIG);
+
+      async function fetchGraphConfig() {
+        const response = await fetch(CONFIG_URL, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(`Unable to load ${CONFIG_URL}: ${response.status}`);
+        }
+
+        const text = await response.text();
+        if (!text.trim()) {
+          throw new Error(`${CONFIG_URL} is empty`);
+        }
+
+        const parsed = loadYaml(text);
+        return buildGraphFromConfig(parsed);
+      }
+
+      function buildGraphFromConfig(rawConfig) {
+        const nodes = [];
+        const links = [];
+
+        const hubLabel = getString(rawConfig?.hub?.label) || getString(rawConfig?.hub?.display) || "Signal Links";
+        const hubDisplay = getString(rawConfig?.hub?.display) || hubLabel;
+        const hubHref = getString(rawConfig?.hub?.visit) || getString(rawConfig?.hub?.href) || null;
+
+        nodes.push({
+          id: "hub",
+          type: "hub",
+          display: hubDisplay,
+          href: hubHref
+        });
+
+        const spokes = Array.isArray(rawConfig?.spokes) ? rawConfig.spokes : [];
+        const usedIds = new Set(["hub"]);
+
+        spokes.forEach((entry, index) => {
+          const display =
+            getString(entry?.display) ||
+            getString(entry?.label) ||
+            getString(entry?.text) ||
+            getString(entry?.title) ||
+            null;
+          const href = getString(entry?.visit) || getString(entry?.href) || getString(entry?.url) || null;
+
+          const fallbackDisplay = display || (href ? deriveDisplayFromUrl(href) : null) || `Link ${index + 1}`;
+          let id = createNodeId(fallbackDisplay, index);
+          while (usedIds.has(id)) {
+            id = `${id}-${index + 1}`;
+          }
+          usedIds.add(id);
+
+          nodes.push({
+            id,
+            type: "spoke",
+            display: fallbackDisplay,
+            href
+          });
+
+          links.push({ source: "hub", target: id });
+        });
+
+        return { nodes, links };
+      }
+
+      function getString(value) {
+        if (typeof value !== "string") return null;
+        const trimmed = value.trim();
+        return trimmed.length ? trimmed : null;
+      }
+
+      function deriveDisplayFromUrl(url) {
+        try {
+          const parsed = new URL(url);
+          return parsed.hostname.replace(/^www\./, "");
+        } catch (err) {
+          return url;
+        }
+      }
+
+      function createNodeId(label, index) {
+        if (!label) {
+          return `spoke-${index + 1}`;
+        }
+        const slug = label
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+        return slug ? `spoke-${slug}` : `spoke-${index + 1}`;
+      }
 
       function LandingGraph() {
         const containerRef = useRef(null);
         const canvasRef = useRef(null);
         const simulationRef = useRef(null);
         const rafRef = useRef(null);
+        const [graphData, setGraphData] = useState(FALLBACK_GRAPH);
+        const [loadError, setLoadError] = useState(null);
 
         useEffect(() => {
+          let cancelled = false;
+
+          (async () => {
+            try {
+              const nextGraph = await fetchGraphConfig();
+              if (!cancelled) {
+                setGraphData(nextGraph);
+                setLoadError(null);
+              }
+            } catch (error) {
+              console.error(error);
+              if (!cancelled) {
+                setLoadError(error);
+              }
+            }
+          })();
+
+          return () => {
+            cancelled = true;
+          };
+        }, []);
+
+        useEffect(() => {
+          if (!graphData) {
+            return undefined;
+          }
+
           const container = containerRef.current;
           const canvas = canvasRef.current;
           const ctx = canvas.getContext("2d");
           canvas.style.cursor = "grab";
 
-          const nodes = DATA.nodes.map((d) => ({ ...d }));
-          const links = DATA.links.map((d) => ({ ...d }));
+          const nodes = graphData.nodes.map((d) => ({ ...d }));
+          const links = graphData.links.map((d) => ({ ...d }));
 
           let width = 0;
           let height = 0;
           let dpr = Math.max(1, window.devicePixelRatio || 1);
+          let positioned = false;
+
+          function applyInitialPositions() {
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const spokeNodes = nodes.filter((n) => n.type === "spoke");
+            const radius = Math.max(140, Math.min(width, height) * 0.32);
+
+            nodes.forEach((node) => {
+              node.vx = 0;
+              node.vy = 0;
+            });
+
+            const hubNode = nodes.find((n) => n.id === "hub") || nodes[0];
+            if (hubNode) {
+              hubNode.x = centerX;
+              hubNode.y = centerY;
+            }
+
+            const count = Math.max(1, spokeNodes.length);
+            spokeNodes.forEach((node, index) => {
+              const angle = (index / count) * Math.PI * 2;
+              node.x = centerX + radius * Math.cos(angle);
+              node.y = centerY + radius * Math.sin(angle);
+            });
+
+            positioned = true;
+
+            if (simulationRef.current) {
+              simulationRef.current.alpha(0.9).restart();
+            }
+          }
 
           function resize() {
             const { width: w, height: h } = container.getBoundingClientRect();
@@ -101,6 +247,9 @@
                 .alpha(0.2)
                 .restart();
             }
+            if (!positioned) {
+              applyInitialPositions();
+            }
           }
 
           const simulation = d3
@@ -110,7 +259,10 @@
               d3
                 .forceLink(links)
                 .id((d) => d.id)
-                .distance((l) => (l.source.id === "hub" ? 170 : 140))
+                .distance((l) => {
+                  const sourceId = typeof l.source === "string" ? l.source : l.source.id;
+                  return sourceId === "hub" ? 170 : 140;
+                })
                 .strength(0.9)
             )
             .force("charge", d3.forceManyBody().strength(-700))
@@ -186,10 +338,10 @@
               canvas.style.cursor = "grab";
             }
 
-            if (wasDragging && !dragMoved && released && released.url) {
+            if (wasDragging && !dragMoved && released && released.href) {
               const elapsed = performance.now() - downAt;
               if (elapsed < 300) {
-                window.open(released.url, "_blank", "noopener,noreferrer");
+                window.open(released.href, "_blank", "noopener,noreferrer");
               }
             }
 
@@ -202,7 +354,10 @@
           window.addEventListener("pointermove", pointermove);
           window.addEventListener("pointerup", pointerup);
 
-          const ro = new ResizeObserver(resize);
+          const ro = new ResizeObserver(() => {
+            positioned = false;
+            resize();
+          });
           ro.observe(container);
           resize();
 
@@ -262,10 +417,14 @@
             ctx.textBaseline = "middle";
             ctx.fillStyle = "#f5f5f5";
             nodes.forEach((n, i) => {
-              if (n.id === "hub") return;
+              const display = n.display || n.id;
+              if (n.id === "hub") {
+                ctx.fillText(display, n.x || 0, (n.y || 0) - 36);
+                return;
+              }
               const r = 16 * (1 + 0.04 * Math.sin(t * 0.9 + i * 0.7));
               const labelY = (n.y || 0) - (r + 12);
-              ctx.fillText(n.id, n.x || 0, labelY);
+              ctx.fillText(display, n.x || 0, labelY);
             });
             ctx.restore();
 
@@ -284,7 +443,7 @@
             window.removeEventListener("pointerup", pointerup);
             ro.disconnect();
           };
-        }, []);
+        }, [graphData]);
 
         return React.createElement(
           "div",
@@ -297,14 +456,49 @@
               alignItems: "center",
               justifyContent: "center",
               backgroundColor: BG_COLOR,
-              overflow: "hidden"
+              overflow: "hidden",
+              position: "relative"
             }
           },
           React.createElement("canvas", {
             ref: canvasRef,
             role: "img",
             "aria-label": "Hub-and-spoke social graph"
-          })
+          }),
+          !graphData &&
+            React.createElement(
+              "div",
+              {
+                style: {
+                  position: "absolute",
+                  inset: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#f5f5f5",
+                  fontSize: "16px",
+                  letterSpacing: "0.02em"
+                }
+              },
+              "Loading graph..."
+            ),
+          loadError &&
+            React.createElement(
+              "div",
+              {
+                style: {
+                  position: "absolute",
+                  bottom: 16,
+                  right: 16,
+                  background: "rgba(0,0,0,0.6)",
+                  padding: "8px 12px",
+                  borderRadius: "8px",
+                  fontSize: "12px",
+                  color: "rgba(255,255,255,0.6)"
+                }
+              },
+              "Using default links; update graph-config.yaml to customize."
+            )
         );
       }
 
