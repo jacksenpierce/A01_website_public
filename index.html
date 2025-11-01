@@ -4,264 +4,312 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Signal Links</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;500&display=swap"
-      rel="stylesheet"
-    />
     <style>
       :root {
         color-scheme: dark;
       }
 
-      * {
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
       }
 
       body {
         margin: 0;
-        font-family: "Barlow", system-ui, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", sans-serif;
-        background: #0d0d0d;
-        color: #ff7518;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
+        background: #0b0b0c;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
       }
 
-      main {
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      #graph {
-        position: relative;
-        width: min(900px, 90vw);
-        height: min(900px, 90vh);
-      }
-
-      svg {
+      #root {
         width: 100%;
         height: 100%;
       }
 
-      .link {
-        stroke: #ff7518;
-        stroke-width: 2.5;
-        stroke-linecap: round;
-        opacity: 0.55;
-        filter: url(#soft-glow);
-      }
-
-      .node circle {
-        fill: #ff7518;
-        opacity: 0.88;
-        filter: url(#soft-glow);
-        animation: pulse 5.6s ease-in-out infinite;
-        transform-box: fill-box;
-        transform-origin: center;
-        cursor: grab;
-      }
-
-      .node circle:active {
-        cursor: grabbing;
-      }
-
-      .node text {
-        fill: #ff7518;
-        font-size: 0.95rem;
-        font-weight: 500;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        text-anchor: middle;
-        pointer-events: none;
-        filter: blur(0.3px);
-      }
-
-      .node a {
-        text-decoration: none;
-        pointer-events: all;
-      }
-
-      .node a text {
-        pointer-events: none;
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          transform: scale(1);
-          opacity: 0.82;
-        }
-        50% {
-          transform: scale(1.12);
-          opacity: 1;
-        }
-      }
-
-      @media (max-width: 600px) {
-        .node text {
-          font-size: 0.8rem;
-        }
+      canvas {
+        display: block;
       }
     </style>
   </head>
   <body>
-    <main>
-      <div id="graph" role="img" aria-label="Interactive network of social links"></div>
-    </main>
+    <div id="root"></div>
+    <script type="module">
+      import React, { useEffect, useRef } from "https://esm.sh/react@18.2.0";
+      import { createRoot } from "https://esm.sh/react-dom@18.2.0/client";
+      import * as d3 from "https://esm.sh/d3@7.9.0?bundle";
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" integrity="sha512-2zJrped1IovnHgwlHGawEq+y3OCAXoTr4Wr9PXgCulvRlQCxwBEm90LkAMPx/+qvOB0fOkH1ZZ1xd6Q671O5jQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-      const svgSize = () => ({
-        width: document.body.clientWidth,
-        height: document.body.clientHeight,
-      });
+      const BURNT_ORANGE = "#CC5500";
+      const BG_COLOR = "#0b0b0c";
+      const LINK_COLOR = "rgba(255,255,255,0.18)";
 
-      const graphContainer = document.getElementById("graph");
-      const { width: initialWidth, height: initialHeight } = svgSize();
+      const DATA = {
+        nodes: [
+          { id: "hub", url: null, type: "hub" },
+          { id: "Instagram", url: "https://instagram.com", type: "spoke" },
+          { id: "Facebook", url: "https://facebook.com", type: "spoke" },
+          { id: "Patreon", url: "https://patreon.com", type: "spoke" },
+          { id: "TikTok", url: "https://tiktok.com", type: "spoke" },
+          { id: "GitHub", url: "https://github.com", type: "spoke" }
+        ],
+        links: [
+          { source: "hub", target: "Instagram" },
+          { source: "hub", target: "Facebook" },
+          { source: "hub", target: "Patreon" },
+          { source: "hub", target: "TikTok" },
+          { source: "hub", target: "GitHub" }
+        ]
+      };
 
-      const svg = d3
-        .select(graphContainer)
-        .append("svg")
-        .attr("viewBox", `0 0 ${initialWidth} ${initialHeight}`)
-        .attr("preserveAspectRatio", "xMidYMid meet");
+      function LandingGraph() {
+        const containerRef = useRef(null);
+        const canvasRef = useRef(null);
+        const simulationRef = useRef(null);
+        const rafRef = useRef(null);
 
-      const defs = svg.append("defs");
-      const glow = defs
-        .append("filter")
-        .attr("id", "soft-glow")
-        .attr("x", "-50%")
-        .attr("y", "-50%")
-        .attr("width", "200%")
-        .attr("height", "200%");
+        useEffect(() => {
+          const container = containerRef.current;
+          const canvas = canvasRef.current;
+          const ctx = canvas.getContext("2d");
+          canvas.style.cursor = "grab";
 
-      glow.append("feGaussianBlur").attr("stdDeviation", 3).attr("result", "coloredBlur");
-      const feMerge = glow.append("feMerge");
-      feMerge.append("feMergeNode").attr("in", "coloredBlur");
-      feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+          const nodes = DATA.nodes.map((d) => ({ ...d }));
+          const links = DATA.links.map((d) => ({ ...d }));
 
-      const nodes = [
-        { id: "hub", label: "", link: null, fixed: true },
-        { id: "tiktok", label: "TikTok", link: "https://www.tiktok.com/" },
-        { id: "instagram", label: "Instagram", link: "https://www.instagram.com/" },
-        { id: "patreon", label: "Patreon", link: "https://www.patreon.com/" },
-        { id: "facebook", label: "Facebook", link: "https://www.facebook.com/" },
-        { id: "github", label: "GitHub", link: "https://github.com/" },
-      ];
+          let width = 0;
+          let height = 0;
+          let dpr = Math.max(1, window.devicePixelRatio || 1);
 
-      const links = nodes
-        .filter((node) => node.id !== "hub")
-        .map((node) => ({ source: "hub", target: node.id }));
+          function resize() {
+            const { width: w, height: h } = container.getBoundingClientRect();
+            width = Math.max(400, w);
+            height = Math.max(400, h);
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            dpr = Math.max(1, window.devicePixelRatio || 1);
+            canvas.width = Math.floor(width * dpr);
+            canvas.height = Math.floor(height * dpr);
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            if (simulationRef.current) {
+              simulationRef.current
+                .force("x", d3.forceX(() => width / 2).strength((d) => (d.id === "hub" ? 0.08 : 0.01)))
+                .force("y", d3.forceY(() => height / 2).strength((d) => (d.id === "hub" ? 0.08 : 0.01)))
+                .alpha(0.2)
+                .restart();
+            }
+          }
 
-      const simulation = d3
-        .forceSimulation(nodes)
-        .force(
-          "link",
-          d3
-            .forceLink(links)
-            .id((d) => d.id)
-            .strength(0.4)
-            .distance(() => Math.min(initialWidth, initialHeight) / 3.4)
-        )
-        .force("charge", d3.forceManyBody().strength(-360))
-        .force("center", d3.forceCenter(initialWidth / 2, initialHeight / 2))
-        .force(
-          "collision",
-          d3.forceCollide().radius((d) => (d.id === "hub" ? 80 : 55)).strength(0.9)
+          const simulation = d3
+            .forceSimulation(nodes)
+            .force(
+              "link",
+              d3
+                .forceLink(links)
+                .id((d) => d.id)
+                .distance((l) => (l.source.id === "hub" ? 170 : 140))
+                .strength(0.9)
+            )
+            .force("charge", d3.forceManyBody().strength(-700))
+            .force("collision", d3.forceCollide().radius((d) => (d.id === "hub" ? 30 : 22)).strength(0.8))
+            .force("x", d3.forceX(() => width / 2).strength((d) => (d.id === "hub" ? 0.08 : 0.01)))
+            .force("y", d3.forceY(() => height / 2).strength((d) => (d.id === "hub" ? 0.08 : 0.01)))
+            .velocityDecay(0.35)
+            .alpha(0.9)
+            .alphaTarget(0.02);
+
+          simulationRef.current = simulation;
+
+          let draggingNode = null;
+          let dragMoved = false;
+          let downPos = null;
+          let downAt = 0;
+
+          function getMouse(evt) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+              x: evt.clientX - rect.left,
+              y: evt.clientY - rect.top
+            };
+          }
+
+          function pickNode(x, y) {
+            const rHit = 26;
+            for (let i = nodes.length - 1; i >= 0; --i) {
+              const n = nodes[i];
+              const dx = x - (n.x || 0);
+              const dy = y - (n.y || 0);
+              if (dx * dx + dy * dy <= rHit * rHit) return n;
+            }
+            return null;
+          }
+
+          function pointerdown(evt) {
+            const { x, y } = getMouse(evt);
+            const n = pickNode(x, y);
+            if (n) {
+              draggingNode = n;
+              dragMoved = false;
+              downPos = { x, y };
+              downAt = performance.now();
+              n.fx = x;
+              n.fy = y;
+              simulation.alphaTarget(0.3).restart();
+              canvas.style.cursor = "grabbing";
+            }
+          }
+
+          function pointermove(evt) {
+            if (!draggingNode) return;
+            const { x, y } = getMouse(evt);
+            draggingNode.fx = x;
+            draggingNode.fy = y;
+            if (!dragMoved && downPos) {
+              const dx = x - downPos.x;
+              const dy = y - downPos.y;
+              dragMoved = Math.hypot(dx, dy) > 4;
+            }
+          }
+
+          function pointerup() {
+            const wasDragging = !!draggingNode;
+            const released = draggingNode;
+            if (draggingNode) {
+              draggingNode.fx = null;
+              draggingNode.fy = null;
+              draggingNode = null;
+              simulation.alphaTarget(0.06);
+              setTimeout(() => simulation.alphaTarget(0.02), 120);
+              canvas.style.cursor = "grab";
+            }
+
+            if (wasDragging && !dragMoved && released && released.url) {
+              const elapsed = performance.now() - downAt;
+              if (elapsed < 300) {
+                window.open(released.url, "_blank", "noopener,noreferrer");
+              }
+            }
+
+            downPos = null;
+            downAt = 0;
+            dragMoved = false;
+          }
+
+          canvas.addEventListener("pointerdown", pointerdown);
+          window.addEventListener("pointermove", pointermove);
+          window.addEventListener("pointerup", pointerup);
+
+          const ro = new ResizeObserver(resize);
+          ro.observe(container);
+          resize();
+
+          function draw() {
+            const t = performance.now() * 0.001;
+            const pulse = 1 + 0.06 * Math.sin(t * 0.9);
+
+            ctx.save();
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = BG_COLOR;
+            ctx.fillRect(0, 0, width, height);
+            ctx.restore();
+
+            ctx.save();
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = LINK_COLOR;
+            ctx.globalAlpha = 0.9;
+            links.forEach((l) => {
+              if (!l.source || !l.target) return;
+              ctx.beginPath();
+              ctx.moveTo(l.source.x, l.source.y);
+              ctx.lineTo(l.target.x, l.target.y);
+              ctx.stroke();
+            });
+            ctx.restore();
+
+            nodes.forEach((n, i) => {
+              const isHub = n.id === "hub";
+              const baseR = isHub ? 24 : 16;
+              const r = baseR * (isHub ? pulse : 1 + 0.04 * Math.sin(t * 0.9 + i * 0.7));
+
+              ctx.save();
+              ctx.globalAlpha = 0.6;
+              ctx.shadowColor = "rgba(204,85,0,0.9)";
+              ctx.shadowBlur = 10;
+              ctx.fillStyle = BURNT_ORANGE;
+              ctx.beginPath();
+              ctx.arc(n.x || 0, n.y || 0, r + 2, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.restore();
+
+              ctx.save();
+              ctx.fillStyle = BURNT_ORANGE;
+              ctx.strokeStyle = "#2d1200";
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.arc(n.x || 0, n.y || 0, r, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.stroke();
+              ctx.restore();
+            });
+
+            ctx.save();
+            ctx.font = "14px ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Inter, sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "#f5f5f5";
+            nodes.forEach((n, i) => {
+              if (n.id === "hub") return;
+              const r = 16 * (1 + 0.04 * Math.sin(t * 0.9 + i * 0.7));
+              const labelY = (n.y || 0) - (r + 12);
+              ctx.fillText(n.id, n.x || 0, labelY);
+            });
+            ctx.restore();
+
+            rafRef.current = requestAnimationFrame(draw);
+          }
+
+          simulation.on("tick", () => {});
+
+          draw();
+
+          return () => {
+            cancelAnimationFrame(rafRef.current);
+            simulation.stop();
+            canvas.removeEventListener("pointerdown", pointerdown);
+            window.removeEventListener("pointermove", pointermove);
+            window.removeEventListener("pointerup", pointerup);
+            ro.disconnect();
+          };
+        }, []);
+
+        return React.createElement(
+          "div",
+          {
+            ref: containerRef,
+            style: {
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: BG_COLOR,
+              overflow: "hidden"
+            }
+          },
+          React.createElement("canvas", {
+            ref: canvasRef,
+            role: "img",
+            "aria-label": "Hub-and-spoke social graph"
+          })
         );
+      }
 
-      const link = svg
-        .append("g")
-        .attr("stroke", null)
-        .selectAll("line")
-        .data(links)
-        .join("line")
-        .attr("class", "link");
-
-      const node = svg
-        .append("g")
-        .selectAll("g")
-        .data(nodes)
-        .join("g")
-        .attr("class", "node")
-        .call(
-          d3
-            .drag()
-            .on("start", (event, d) => {
-              if (!event.active) simulation.alphaTarget(0.2).restart();
-              d.fx = d.x;
-              d.fy = d.y;
-            })
-            .on("drag", (event, d) => {
-              d.fx = event.x;
-              d.fy = event.y;
-            })
-            .on("end", (event, d) => {
-              if (!event.active) simulation.alphaTarget(0);
-              d.fx = null;
-              d.fy = null;
-            })
-        );
-
-      node
-        .append("circle")
-        .attr("r", (d) => (d.id === "hub" ? 22 : 16));
-
-      node
-        .filter((d) => d.link)
-        .append("a")
-        .attr("xlink:href", (d) => d.link)
-        .attr("target", "_blank")
-        .attr("rel", "noopener noreferrer")
-        .append("text")
-        .attr("dy", -28)
-        .text((d) => d.label);
-
-      const updatePositions = () => {
-        link
-          .attr("x1", (d) => d.source.x)
-          .attr("y1", (d) => d.source.y)
-          .attr("x2", (d) => d.target.x)
-          .attr("y2", (d) => d.target.y);
-
-        node.attr("transform", (d) => `translate(${d.x},${d.y})`);
-      };
-
-      simulation.on("tick", updatePositions);
-
-      const resize = () => {
-        const { width, height } = svgSize();
-        svg.attr("viewBox", `0 0 ${width} ${height}`);
-        simulation
-          .force("center", d3.forceCenter(width / 2, height / 2))
-          .force(
-            "link",
-            d3
-              .forceLink(links)
-              .id((d) => d.id)
-              .strength(0.4)
-              .distance(() => Math.min(width, height) / 3.4)
-          )
-          .alpha(0.6)
-          .restart();
-      };
-
-      window.addEventListener("resize", resize);
-
-      // Gentle idle motion to keep the network alive.
-      const breathe = () => {
-        simulation.alpha(0.12).restart();
-        setTimeout(breathe, 4800);
-      };
-
-      breathe();
+      const rootElement = document.getElementById("root");
+      createRoot(rootElement).render(React.createElement(LandingGraph));
     </script>
   </body>
 </html>
