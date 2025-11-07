@@ -1,61 +1,43 @@
 import React, { useEffect, useRef, useState } from "https://esm.sh/react@18.2.0";
 import { createRoot } from "https://esm.sh/react-dom@18.2.0/client";
 import * as d3 from "https://esm.sh/d3@7.9.0?bundle";
+import graphDocument from "../config/graph.json" assert { type: "json" };
 
-const BG_COLOR = "#0b0b0c";
-const LINK_COLOR = "rgba(255,255,255,0.18)";
-const DEFAULT_NODE_COLOR = "#CC5500";
-const DEFAULT_LABEL_COLOR = "#f5f5f5";
 const CONFIG_URL = "config/graph.json";
 
-const FALLBACK_GRAPH = normalizeGraph({
-  nodes: [
-    {
-      id: "signal",
-      label: "Signal Links",
-      href: null,
-      color: DEFAULT_NODE_COLOR,
-      radius: 26
-    },
-    {
-      id: "instagram",
-      label: "Instagram",
-      href: "https://instagram.com/",
-      color: DEFAULT_NODE_COLOR
-    },
-    {
-      id: "facebook",
-      label: "Facebook",
-      href: "https://facebook.com/",
-      color: DEFAULT_NODE_COLOR
-    },
-    {
-      id: "patreon",
-      label: "Patreon",
-      href: "https://patreon.com/",
-      color: DEFAULT_NODE_COLOR
-    },
-    {
-      id: "tiktok",
-      label: "TikTok",
-      href: "https://tiktok.com/",
-      color: DEFAULT_NODE_COLOR
-    },
-    {
-      id: "github",
-      label: "GitHub",
-      href: "https://github.com/",
-      color: DEFAULT_NODE_COLOR
-    }
-  ],
-  links: [
-    { source: "signal", target: "instagram" },
-    { source: "signal", target: "facebook" },
-    { source: "signal", target: "patreon" },
-    { source: "signal", target: "tiktok" },
-    { source: "signal", target: "github" }
-  ]
-});
+const DEFAULT_THEME = {
+  backgroundColor: "#0b0b0c",
+  linkColor: "rgba(255,255,255,0.18)",
+  labelFont: "14px ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Inter, sans-serif",
+  loadingMessage: "Loading graph...",
+  loadingTextColor: "#f5f5f5",
+  errorMessage: "Using fallback graph; update config/graph.json to customize."
+};
+
+const DEFAULT_NODE_DEFAULTS = {
+  color: "#CC5500",
+  labelColor: "#f5f5f5",
+  shape: "circle",
+  radius: 18,
+  strokeColor: "#2d1200",
+  pulse: 0.06,
+  collisionPadding: 4,
+  charge: -420
+};
+
+const DEFAULT_META = {
+  title: "Signal Links"
+};
+
+const FALLBACK_GRAPH = normalizeGraph(graphDocument, null);
+
+if (!FALLBACK_GRAPH) {
+  throw new Error("config/graph.json is missing required data.");
+}
+
+if (FALLBACK_GRAPH.meta?.title) {
+  document.title = FALLBACK_GRAPH.meta.title;
+}
 
 async function fetchGraphConfig() {
   const response = await fetch(CONFIG_URL, { cache: "no-store" });
@@ -64,54 +46,66 @@ async function fetchGraphConfig() {
   }
 
   const json = await response.json();
-  return normalizeGraph(json);
+  const normalized = normalizeGraph(json, FALLBACK_GRAPH);
+  if (!normalized) {
+    throw new Error("Config file did not include any nodes.");
+  }
+  return normalized;
 }
 
-function normalizeGraph(raw) {
+function normalizeGraph(raw, fallback) {
   if (!raw || typeof raw !== "object") {
-    return FALLBACK_GRAPH;
+    return fallback ?? null;
   }
 
+  const defaults = normalizeDefaults(raw.defaults);
   const nodes = Array.isArray(raw.nodes) ? raw.nodes : [];
   const links = Array.isArray(raw.links) ? raw.links : [];
   const seen = new Set();
 
   const normalizedNodes = nodes
-    .map((node, index) => normalizeNode(node, index))
+    .map((node, index) => normalizeNode(node, index, defaults.node))
     .filter(Boolean);
 
   normalizedNodes.forEach((node) => seen.add(node.id));
+
+  if (!normalizedNodes.length) {
+    return fallback ?? null;
+  }
 
   const normalizedLinks = links
     .map((link) => normalizeLink(link, seen))
     .filter(Boolean);
 
-  if (!normalizedNodes.length) {
-    return FALLBACK_GRAPH;
-  }
-
   return {
+    meta: normalizeMeta(raw.meta),
+    theme: defaults.theme,
+    defaults: {
+      node: defaults.node
+    },
     nodes: normalizedNodes,
     links: normalizedLinks
   };
 }
 
-function normalizeNode(node, index) {
+function normalizeNode(node, index, defaults) {
   if (!node || typeof node !== "object") {
     return null;
   }
 
+  const nodeDefaults = defaults ?? DEFAULT_NODE_DEFAULTS;
   const id = getString(node.id) || `node-${index + 1}`;
   const label = getString(node.label) || id;
   const href = getString(node.href) || getString(node.url) || null;
-  const color = getString(node.color) || DEFAULT_NODE_COLOR;
-  const labelColor = getString(node.labelColor) || DEFAULT_LABEL_COLOR;
-  const shape = getString(node.shape) || "circle";
-  const radius = getNumber(node.radius, 18);
-  const strokeColor = getString(node.strokeColor) || "#2d1200";
-  const pulse = getNumber(node.pulse, shape === "circle" ? 0.06 : 0);
-  const collisionPadding = getNumber(node.collisionPadding, 4);
-  const charge = getNumber(node.charge, null);
+  const shape = getString(node.shape) || nodeDefaults.shape;
+  const color = getString(node.color) || nodeDefaults.color;
+  const labelColor = getString(node.labelColor) || nodeDefaults.labelColor;
+  const radius = getNumber(node.radius, nodeDefaults.radius);
+  const strokeColor = getString(node.strokeColor) || nodeDefaults.strokeColor;
+  const basePulse = getNumber(node.pulse, nodeDefaults.pulse);
+  const pulse = shape === "circle" ? basePulse : getNumber(node.pulse, 0);
+  const collisionPadding = getNumber(node.collisionPadding, nodeDefaults.collisionPadding);
+  const charge = node.charge === null ? null : getNumber(node.charge, nodeDefaults.charge);
 
   return {
     id,
@@ -125,6 +119,43 @@ function normalizeNode(node, index) {
     pulse,
     collisionPadding,
     charge
+  };
+}
+
+function normalizeDefaults(rawDefaults) {
+  const theme = normalizeTheme(rawDefaults?.theme);
+  const node = normalizeNodeDefaults(rawDefaults?.node);
+  return { theme, node };
+}
+
+function normalizeTheme(rawTheme) {
+  return {
+    backgroundColor: getString(rawTheme?.backgroundColor) || DEFAULT_THEME.backgroundColor,
+    linkColor: getString(rawTheme?.linkColor) || DEFAULT_THEME.linkColor,
+    labelFont: getString(rawTheme?.labelFont) || DEFAULT_THEME.labelFont,
+    loadingMessage: getString(rawTheme?.loadingMessage) || DEFAULT_THEME.loadingMessage,
+    loadingTextColor: getString(rawTheme?.loadingTextColor) || DEFAULT_THEME.loadingTextColor,
+    errorMessage: getString(rawTheme?.errorMessage) || DEFAULT_THEME.errorMessage
+  };
+}
+
+function normalizeNodeDefaults(rawNodeDefaults) {
+  const chargeValue = rawNodeDefaults?.charge;
+  return {
+    color: getString(rawNodeDefaults?.color) || DEFAULT_NODE_DEFAULTS.color,
+    labelColor: getString(rawNodeDefaults?.labelColor) || DEFAULT_NODE_DEFAULTS.labelColor,
+    shape: getString(rawNodeDefaults?.shape) || DEFAULT_NODE_DEFAULTS.shape,
+    radius: getNumber(rawNodeDefaults?.radius, DEFAULT_NODE_DEFAULTS.radius),
+    strokeColor: getString(rawNodeDefaults?.strokeColor) || DEFAULT_NODE_DEFAULTS.strokeColor,
+    pulse: getNumber(rawNodeDefaults?.pulse, DEFAULT_NODE_DEFAULTS.pulse),
+    collisionPadding: getNumber(rawNodeDefaults?.collisionPadding, DEFAULT_NODE_DEFAULTS.collisionPadding),
+    charge: chargeValue === null ? null : getNumber(chargeValue, DEFAULT_NODE_DEFAULTS.charge)
+  };
+}
+
+function normalizeMeta(rawMeta) {
+  return {
+    title: getString(rawMeta?.title) || DEFAULT_META.title
   };
 }
 
@@ -162,7 +193,7 @@ function getNumber(value, fallback) {
   return Number.isFinite(num) ? num : fallback;
 }
 
-function drawNode(ctx, node, time, index) {
+function drawNode(ctx, node, time, index, labelFont) {
   const pulseScale = 1 + (node.pulse || 0) * Math.sin(time * 0.9 + index * 0.7);
   const radius = node.radius * pulseScale;
 
@@ -200,7 +231,8 @@ function drawNode(ctx, node, time, index) {
   ctx.restore();
 
   ctx.save();
-  ctx.font = "14px ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Inter, sans-serif";
+  ctx.font = getString(labelFont) ||
+    "14px ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Inter, sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillStyle = node.labelColor;
@@ -216,6 +248,7 @@ function LandingGraph() {
   const rafRef = useRef(null);
   const [graphData, setGraphData] = useState(FALLBACK_GRAPH);
   const [loadError, setLoadError] = useState(null);
+  const theme = graphData?.theme ?? FALLBACK_GRAPH.theme ?? DEFAULT_THEME;
 
   useEffect(() => {
     let cancelled = false;
@@ -241,6 +274,12 @@ function LandingGraph() {
   }, []);
 
   useEffect(() => {
+    if (graphData?.meta?.title) {
+      document.title = graphData.meta.title;
+    }
+  }, [graphData?.meta?.title]);
+
+  useEffect(() => {
     if (!graphData) {
       return undefined;
     }
@@ -252,6 +291,10 @@ function LandingGraph() {
 
     const nodes = graphData.nodes.map((d) => ({ ...d }));
     const links = graphData.links.map((d) => ({ ...d }));
+    const activeTheme = graphData.theme ?? FALLBACK_GRAPH.theme ?? DEFAULT_THEME;
+    const backgroundColor = activeTheme?.backgroundColor ?? DEFAULT_THEME.backgroundColor;
+    const linkColor = activeTheme?.linkColor ?? DEFAULT_THEME.linkColor;
+    const labelFont = activeTheme?.labelFont ?? DEFAULT_THEME.labelFont;
 
     let width = 0;
     let height = 0;
@@ -385,13 +428,13 @@ function LandingGraph() {
       ctx.save();
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = BG_COLOR;
+      ctx.fillStyle = backgroundColor;
       ctx.fillRect(0, 0, width, height);
       ctx.restore();
 
       ctx.save();
       ctx.lineWidth = 1.5;
-      ctx.strokeStyle = LINK_COLOR;
+      ctx.strokeStyle = linkColor;
       ctx.globalAlpha = 0.9;
       links.forEach((link) => {
         if (!link.source || !link.target) return;
@@ -405,7 +448,7 @@ function LandingGraph() {
       });
       ctx.restore();
 
-      nodes.forEach((node, index) => drawNode(ctx, node, time, index));
+      nodes.forEach((node, index) => drawNode(ctx, node, time, index, labelFont));
 
       rafRef.current = requestAnimationFrame(draw);
     }
@@ -433,7 +476,7 @@ function LandingGraph() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: BG_COLOR,
+        backgroundColor: theme?.backgroundColor ?? DEFAULT_THEME.backgroundColor,
         overflow: "hidden",
         position: "relative"
       }
@@ -453,12 +496,12 @@ function LandingGraph() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "#f5f5f5",
+            color: theme?.loadingTextColor ?? DEFAULT_THEME.loadingTextColor,
             fontSize: "16px",
             letterSpacing: "0.02em"
           }
         },
-        "Loading graph..."
+        theme?.loadingMessage ?? DEFAULT_THEME.loadingMessage
       ),
     loadError &&
       React.createElement(
@@ -472,10 +515,10 @@ function LandingGraph() {
             padding: "8px 12px",
             borderRadius: "8px",
             fontSize: "12px",
-            color: "rgba(255,255,255,0.6)"
+            color: theme?.loadingTextColor ?? DEFAULT_THEME.loadingTextColor
           }
         },
-        "Using fallback graph; update config/graph.json to customize."
+        theme?.errorMessage ?? DEFAULT_THEME.errorMessage
       )
   );
 }
