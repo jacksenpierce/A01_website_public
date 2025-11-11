@@ -2,22 +2,19 @@
 
 This repository now serves a single-screen landing page built around a gently pulsing network of social links.
 
-## Legacy site
+## Updating the graph
 
-The previous multi-page site and all supporting assets have been moved to [`legacy_site/`](legacy_site/).
+Links, labels, and visibility are all controlled from a single YAML document at [`config/sites.yaml`](config/sites.yaml). Each entry should contain:
 
-To restore the legacy experience at the repository root:
+* `label` – the text shown next to the node.
+* `url` – the destination opened when the node is tapped or clicked.
+* `state` – optional. Use `active` (default) for regular styling, `inactive` to keep the node visible but dimmed, or `hidden` to omit it entirely without deleting the entry.
 
-1. Back up or remove the new `index.html` file (and any other new assets you may have added).
-2. Move the contents of `legacy_site/` back into the repository root:
+The first valid node in the list (or any node marked `hub: true`) becomes the center of the graph. All other visible nodes automatically connect to it, so you only need to edit this one file—there’s no need to update separate link definitions. Malformed or duplicate entries are skipped so bad data doesn’t break the visualization.
 
-   ```bash
-   cd /path/to/A01_website_public
-   shopt -s dotglob
-   mv legacy_site/* .
-   shopt -u dotglob
-   ```
+### Additional YAML fields
 
-3. Optionally delete the now-empty `legacy_site/` folder.
+* `meta.title` controls the browser tab title.
+* `theme` keys (background color, link color, etc.) are optional overrides; if omitted the built-in orange-on-black presentation is used.
 
-All original documentation, assets, and build scripts remain untouched inside `legacy_site/` should you need to reattach them.
+If the YAML cannot be parsed or produces no valid nodes, the page falls back to a single hub entry so you can see that the graph is still running.
