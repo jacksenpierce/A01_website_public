@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "https://esm.sh/react@18.2.0";
 import { createRoot } from "https://esm.sh/react-dom@18.2.0/client";
 import * as d3 from "https://esm.sh/d3@7.9.0?bundle";
-import graphDocument from "../config/graph.json" assert { type: "json" };
+import yaml from "https://esm.sh/js-yaml@4.1.0";
 
-const CONFIG_URL = "config/graph.json";
+const YAML_CONFIG_URL = "config/sites.yaml";
 
 const DEFAULT_THEME = {
   backgroundColor: "#0b0b0c",
@@ -11,175 +11,228 @@ const DEFAULT_THEME = {
   labelFont: "14px ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Inter, sans-serif",
   loadingMessage: "Loading graph...",
   loadingTextColor: "#f5f5f5",
-  errorMessage: "Using fallback graph; update config/graph.json to customize."
+  errorMessage: "Check config/sites.yaml for formatting issues."
 };
 
-const DEFAULT_NODE_DEFAULTS = {
-  color: "#CC5500",
-  labelColor: "#f5f5f5",
-  shape: "circle",
-  radius: 18,
-  strokeColor: "#2d1200",
-  pulse: 0.06,
-  collisionPadding: 4,
-  charge: -420
-};
+const DEFAULT_META_TITLE = "Signal Links";
 
-const DEFAULT_META = {
-  title: "Signal Links"
-};
-
-const FALLBACK_GRAPH = normalizeGraph(graphDocument, null);
-
-if (!FALLBACK_GRAPH) {
-  throw new Error("config/graph.json is missing required data.");
-}
-
-if (FALLBACK_GRAPH.meta?.title) {
-  document.title = FALLBACK_GRAPH.meta.title;
-}
+const ACTIVE_NODE_COLOR = "#CC5500";
+const INACTIVE_NODE_COLOR = "#5B3A24";
+const HUB_NODE_COLOR = "#F2721C";
 
 async function fetchGraphConfig() {
-  const response = await fetch(CONFIG_URL, { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`Unable to load ${CONFIG_URL}: ${response.status}`);
-  }
+  try {
+    const response = await fetch(YAML_CONFIG_URL, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Unable to load ${YAML_CONFIG_URL}: ${response.status}`);
+    }
 
-  const json = await response.json();
-  const normalized = normalizeGraph(json, FALLBACK_GRAPH);
-  if (!normalized) {
-    throw new Error("Config file did not include any nodes.");
+    const text = await response.text();
+    const yamlDoc = yaml.load(text);
+    const parsed = parseYamlGraph(yamlDoc);
+    if (!parsed) {
+      throw new Error("YAML config did not contain any valid nodes.");
+    }
+
+    return { graph: parsed, error: null };
+  } catch (error) {
+    console.error("Unable to load YAML graph config", error);
+    return { graph: DEFAULT_GRAPH, error };
   }
-  return normalized;
 }
 
-function normalizeGraph(raw, fallback) {
-  if (!raw || typeof raw !== "object") {
-    return fallback ?? null;
+function parseYamlGraph(raw) {
+  if (!raw) {
+    return null;
   }
 
-  const defaults = normalizeDefaults(raw.defaults);
-  const nodes = Array.isArray(raw.nodes) ? raw.nodes : [];
-  const links = Array.isArray(raw.links) ? raw.links : [];
+  const container = Array.isArray(raw) ? { nodes: raw } : raw;
+  if (!container || typeof container !== "object") {
+    return null;
+  }
+
+  const nodesInput = Array.isArray(container.nodes)
+    ? container.nodes
+    : Array.isArray(raw)
+      ? raw
+      : [];
+
+  const { nodes, links } = buildNodesFromList(nodesInput);
+  if (!nodes.length) {
+    return null;
+  }
+
+  const meta = {
+    title: getString(container.meta?.title) || DEFAULT_META_TITLE
+  };
+
+  const theme = applyThemeOverrides(container.theme);
+
+  return {
+    meta,
+    theme,
+    nodes,
+    links
+  };
+}
+
+function applyThemeOverrides(rawTheme) {
+  if (!rawTheme || typeof rawTheme !== "object") {
+    return { ...DEFAULT_THEME };
+  }
+
+  return {
+    backgroundColor: getString(rawTheme.backgroundColor) || DEFAULT_THEME.backgroundColor,
+    linkColor: getString(rawTheme.linkColor) || DEFAULT_THEME.linkColor,
+    labelFont: getString(rawTheme.labelFont) || DEFAULT_THEME.labelFont,
+    loadingMessage: getString(rawTheme.loadingMessage) || DEFAULT_THEME.loadingMessage,
+    loadingTextColor: getString(rawTheme.loadingTextColor) || DEFAULT_THEME.loadingTextColor,
+    errorMessage: getString(rawTheme.errorMessage) || DEFAULT_THEME.errorMessage
+  };
+}
+
+function buildNodesFromList(entries) {
+  const cleaned = [];
   const seen = new Set();
 
-  const normalizedNodes = nodes
-    .map((node, index) => normalizeNode(node, index, defaults.node))
-    .filter(Boolean);
+  entries.forEach((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return;
+    }
 
-  normalizedNodes.forEach((node) => seen.add(node.id));
+    const label = getString(entry.label) || getString(entry.name);
+    const url = getString(entry.url) || getString(entry.href);
+    const explicitId = getString(entry.id);
+    const state = normalizeState(entry);
 
-  if (!normalizedNodes.length) {
-    return fallback ?? null;
+    if (!label || !url || state === "hidden") {
+      return;
+    }
+
+    const generatedId = explicitId || slugify(label);
+    if (!generatedId || seen.has(generatedId)) {
+      return;
+    }
+
+    seen.add(generatedId);
+    cleaned.push({
+      id: generatedId,
+      label,
+      url,
+      state,
+      wantsHub: entry.hub === true
+    });
+  });
+
+  if (!cleaned.length) {
+    return { nodes: [], links: [] };
   }
 
-  const normalizedLinks = links
-    .map((link) => normalizeLink(link, seen))
-    .filter(Boolean);
-
-  return {
-    meta: normalizeMeta(raw.meta),
-    theme: defaults.theme,
-    defaults: {
-      node: defaults.node
-    },
-    nodes: normalizedNodes,
-    links: normalizedLinks
-  };
-}
-
-function normalizeNode(node, index, defaults) {
-  if (!node || typeof node !== "object") {
-    return null;
+  let hubIndex = cleaned.findIndex((item) => item.wantsHub);
+  if (hubIndex === -1) {
+    hubIndex = 0;
   }
 
-  const nodeDefaults = defaults ?? DEFAULT_NODE_DEFAULTS;
-  const id = getString(node.id) || `node-${index + 1}`;
-  const label = getString(node.label) || id;
-  const href = getString(node.href) || getString(node.url) || null;
-  const shape = getString(node.shape) || nodeDefaults.shape;
-  const color = getString(node.color) || nodeDefaults.color;
-  const labelColor = getString(node.labelColor) || nodeDefaults.labelColor;
-  const radius = getNumber(node.radius, nodeDefaults.radius);
-  const strokeColor = getString(node.strokeColor) || nodeDefaults.strokeColor;
-  const basePulse = getNumber(node.pulse, nodeDefaults.pulse);
-  const pulse = shape === "circle" ? basePulse : getNumber(node.pulse, 0);
-  const collisionPadding = getNumber(node.collisionPadding, nodeDefaults.collisionPadding);
-  const charge = node.charge === null ? null : getNumber(node.charge, nodeDefaults.charge);
+  const hubId = cleaned[hubIndex].id;
+  const nodes = cleaned.map((item, index) => {
+    const isHub = index === hubIndex;
+    const color = isHub ? HUB_NODE_COLOR : ACTIVE_NODE_COLOR;
+    const inactiveColor = isHub ? dimHexColor(HUB_NODE_COLOR, 0.36) : INACTIVE_NODE_COLOR;
+    const labelColor = "#f5f5f5";
+    const strokeColor = isHub ? "#3b1a05" : "#2d1200";
+    const baseRadius = isHub ? 28 : 18;
+    const pulse = item.state === "inactive" ? 0 : isHub ? 0.08 : 0.06;
+
+    return {
+      id: item.id,
+      label: item.label,
+      href: item.url,
+      color: item.state === "inactive" ? inactiveColor : color,
+      labelColor,
+      shape: isHub ? "square" : "circle",
+      radius: baseRadius,
+      strokeColor,
+      pulse,
+      collisionPadding: isHub ? 6 : 4,
+      charge: isHub ? -520 : -420,
+      renderState: item.state
+    };
+  });
+
+  const links = nodes
+    .filter((node) => node.id !== hubId)
+    .map((node) => ({
+      source: node.id,
+      target: hubId,
+      strength: 0.9
+    }));
+
+  return { nodes, links };
+}
+
+const DEFAULT_GRAPH = (() => {
+  const { nodes, links } = buildNodesFromList([
+    {
+      id: "signal",
+      label: "Signal Links",
+      url: "https://signal.org/",
+      state: "active",
+      hub: true
+    }
+  ]);
 
   return {
-    id,
-    label,
-    href,
-    color,
-    labelColor,
-    shape,
-    radius,
-    strokeColor,
-    pulse,
-    collisionPadding,
-    charge
+    meta: { title: DEFAULT_META_TITLE },
+    theme: { ...DEFAULT_THEME },
+    nodes,
+    links
   };
-}
+})();
 
-function normalizeDefaults(rawDefaults) {
-  const theme = normalizeTheme(rawDefaults?.theme);
-  const node = normalizeNodeDefaults(rawDefaults?.node);
-  return { theme, node };
-}
-
-function normalizeTheme(rawTheme) {
-  return {
-    backgroundColor: getString(rawTheme?.backgroundColor) || DEFAULT_THEME.backgroundColor,
-    linkColor: getString(rawTheme?.linkColor) || DEFAULT_THEME.linkColor,
-    labelFont: getString(rawTheme?.labelFont) || DEFAULT_THEME.labelFont,
-    loadingMessage: getString(rawTheme?.loadingMessage) || DEFAULT_THEME.loadingMessage,
-    loadingTextColor: getString(rawTheme?.loadingTextColor) || DEFAULT_THEME.loadingTextColor,
-    errorMessage: getString(rawTheme?.errorMessage) || DEFAULT_THEME.errorMessage
-  };
-}
-
-function normalizeNodeDefaults(rawNodeDefaults) {
-  const chargeValue = rawNodeDefaults?.charge;
-  return {
-    color: getString(rawNodeDefaults?.color) || DEFAULT_NODE_DEFAULTS.color,
-    labelColor: getString(rawNodeDefaults?.labelColor) || DEFAULT_NODE_DEFAULTS.labelColor,
-    shape: getString(rawNodeDefaults?.shape) || DEFAULT_NODE_DEFAULTS.shape,
-    radius: getNumber(rawNodeDefaults?.radius, DEFAULT_NODE_DEFAULTS.radius),
-    strokeColor: getString(rawNodeDefaults?.strokeColor) || DEFAULT_NODE_DEFAULTS.strokeColor,
-    pulse: getNumber(rawNodeDefaults?.pulse, DEFAULT_NODE_DEFAULTS.pulse),
-    collisionPadding: getNumber(rawNodeDefaults?.collisionPadding, DEFAULT_NODE_DEFAULTS.collisionPadding),
-    charge: chargeValue === null ? null : getNumber(chargeValue, DEFAULT_NODE_DEFAULTS.charge)
-  };
-}
-
-function normalizeMeta(rawMeta) {
-  return {
-    title: getString(rawMeta?.title) || DEFAULT_META.title
-  };
-}
-
-function normalizeLink(link, nodeSet) {
-  if (!link || typeof link !== "object") {
-    return null;
+function normalizeState(entry) {
+  const state = getString(entry.state);
+  const normalized = state ? state.toLowerCase() : null;
+  if (normalized === "hidden" || normalized === "inactive" || normalized === "active") {
+    return normalized;
   }
 
-  const source = getString(link.source);
-  const target = getString(link.target);
-  if (!source || !target) {
-    return null;
+  if (entry.visible === false) {
+    return "hidden";
   }
 
-  if (!nodeSet.has(source) || !nodeSet.has(target)) {
-    return null;
+  if (entry.active === false) {
+    return "inactive";
   }
 
-  return {
-    source,
-    target,
-    strength: getNumber(link.strength, null),
-    distance: getNumber(link.distance, null)
+  return "active";
+}
+
+function slugify(value) {
+  if (!value) return null;
+  const normalized = value
+    .toLowerCase()
+    .replace(/[^a-z0-9\s_-]/g, "")
+    .trim()
+    .replace(/[\s_-]+/g, "-");
+  return normalized.length ? normalized : null;
+}
+
+function dimHexColor(hex, amount) {
+  if (!/^#?[0-9a-fA-F]{6}$/.test(hex)) {
+    return hex;
+  }
+  const clean = hex.replace("#", "");
+  const r = parseInt(clean.slice(0, 2), 16);
+  const g = parseInt(clean.slice(2, 4), 16);
+  const b = parseInt(clean.slice(4, 6), 16);
+  const factor = Math.max(0, Math.min(1, 1 - amount));
+  const toHex = (value) => {
+    const next = Math.round(value * factor)
+      .toString(16)
+      .padStart(2, "0");
+    return next;
   };
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
 function getString(value) {
@@ -188,17 +241,15 @@ function getString(value) {
   return trimmed.length ? trimmed : null;
 }
 
-function getNumber(value, fallback) {
-  const num = Number(value);
-  return Number.isFinite(num) ? num : fallback;
-}
-
 function drawNode(ctx, node, time, index, labelFont) {
-  const pulseScale = 1 + (node.pulse || 0) * Math.sin(time * 0.9 + index * 0.7);
+  const renderState = node.renderState || "active";
+  const basePulse = node.pulse || 0;
+  const activePulse = renderState === "inactive" ? 0 : basePulse;
+  const pulseScale = 1 + activePulse * Math.sin(time * 0.9 + index * 0.7);
   const radius = node.radius * pulseScale;
 
   ctx.save();
-  ctx.globalAlpha = 0.65;
+  ctx.globalAlpha = renderState === "inactive" ? 0.4 : 0.65;
   ctx.shadowColor = `${node.color}E6`;
   ctx.shadowBlur = 10;
   ctx.fillStyle = node.color;
@@ -235,7 +286,7 @@ function drawNode(ctx, node, time, index, labelFont) {
     "14px ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Inter, sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillStyle = node.labelColor;
+  ctx.fillStyle = renderState === "inactive" ? "#d6c7ba" : node.labelColor;
   const labelOffset = node.shape === "square" ? radius + 14 : radius + 12;
   ctx.fillText(node.label, node.x || 0, (node.y || 0) - labelOffset);
   ctx.restore();
@@ -246,19 +297,19 @@ function LandingGraph() {
   const canvasRef = useRef(null);
   const simulationRef = useRef(null);
   const rafRef = useRef(null);
-  const [graphData, setGraphData] = useState(FALLBACK_GRAPH);
+  const [graphData, setGraphData] = useState(DEFAULT_GRAPH);
   const [loadError, setLoadError] = useState(null);
-  const theme = graphData?.theme ?? FALLBACK_GRAPH.theme ?? DEFAULT_THEME;
+  const theme = graphData?.theme ?? DEFAULT_THEME;
 
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
       try {
-        const nextGraph = await fetchGraphConfig();
+        const { graph, error } = await fetchGraphConfig();
         if (!cancelled) {
-          setGraphData(nextGraph);
-          setLoadError(null);
+          setGraphData(graph);
+          setLoadError(error);
         }
       } catch (error) {
         console.error(error);
@@ -291,7 +342,7 @@ function LandingGraph() {
 
     const nodes = graphData.nodes.map((d) => ({ ...d }));
     const links = graphData.links.map((d) => ({ ...d }));
-    const activeTheme = graphData.theme ?? FALLBACK_GRAPH.theme ?? DEFAULT_THEME;
+    const activeTheme = graphData.theme ?? DEFAULT_THEME;
     const backgroundColor = activeTheme?.backgroundColor ?? DEFAULT_THEME.backgroundColor;
     const linkColor = activeTheme?.linkColor ?? DEFAULT_THEME.linkColor;
     const labelFont = activeTheme?.labelFont ?? DEFAULT_THEME.labelFont;
@@ -302,8 +353,8 @@ function LandingGraph() {
 
     function resize() {
       const { width: w, height: h } = container.getBoundingClientRect();
-      width = Math.max(400, w);
-      height = Math.max(400, h);
+      width = Math.max(200, w);
+      height = Math.max(200, h);
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       dpr = Math.max(1, window.devicePixelRatio || 1);
