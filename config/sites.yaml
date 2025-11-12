@@ -8,22 +8,22 @@ theme:
   loadingTextColor: "#f5f5f5"
   errorMessage: "Showing default links; check config/sites.yaml."
 nodes:
-  - id: signal
-    label: Signal Links
-    url: https://signal.org/
+  - id: signal links
+    label: you are here
+    url: jacksenpierce.com
     hub: true
     state: active
   - label: Instagram
-    url: https://instagram.com/
+    url: https://www.instagram.com/jacksenpierce/
     state: active
   - label: Facebook
     url: https://facebook.com/
-    state: active
+    state: hidden
   - label: Patreon
     url: https://patreon.com/
-    state: inactive
+    state: hidden
   - label: TikTok
-    url: https://tiktok.com/
+    url: https://www.tiktok.com/@jacksen.pierce
     state: active
   - label: GitHub
     url: https://github.com/
